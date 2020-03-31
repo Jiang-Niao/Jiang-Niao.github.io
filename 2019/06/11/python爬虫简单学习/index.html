@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="JiangNiao">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="JiangNiao">
+    
+    <meta name="keywords" content="hexo,网络安全,hexo-blog">
+    
+    <meta name="description" content="一起努力">
+    <meta name="description" content="python爬虫简单学习，只能入个门">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python爬虫简单学习">
+<meta property="og:url" content="https://github.com/Jiang-Niao/Jiang-Niao.github.io.git/2019/06/11/python%E7%88%AC%E8%99%AB%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="JiangNiao&#39;s Bolg">
+<meta property="og:description" content="python爬虫简单学习，只能入个门">
+<meta property="article:published_time" content="2019-06-11T03:57:28.867Z">
+<meta property="article:modified_time" content="2020-03-31T07:37:48.381Z">
+<meta property="article:author" content="JiangNiao">
+<meta property="article:tag" content="web">
+<meta name="twitter:card" content="summary">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    
+    <title>python爬虫简单学习 · Jiang-Niao&#39;s Blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/jn.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >Jiang-Niao&#39;s Blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">python爬虫简单学习</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>Jiang-Niao's Blog</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(http://images.xianyu123.club/20200331154657.png)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            python爬虫简单学习
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "web">web</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">3k</span>阅读时长: <span class="post-count reading-time">15 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/06/11</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>python爬虫简单学习，只能入个门</p>
+<a id="more"></a>
+
+<h1 id="python爬虫简单学习"><a href="#python爬虫简单学习" class="headerlink" title="python爬虫简单学习"></a>python爬虫简单学习</h1><h2 id="句子含义"><a href="#句子含义" class="headerlink" title="句子含义"></a>句子含义</h2><ol>
+<li><p>导入模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取网页</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">r &#x3D; requests.get(&#39;https:&#x2F;&#x2F;api.github.com&#x2F;events&#39;)</span><br><span class="line">Github 的公共时间线</span><br></pre></td></tr></table></figure>
+
+
+
+
+</li>
+</ol>
+<h2 id="总体功能的一个演示"><a href="#总体功能的一个演示" class="headerlink" title="总体功能的一个演示"></a>总体功能的一个演示</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">response  &#x3D; requests.get(&quot;https:&#x2F;&#x2F;www.baidu.com&quot;)</span><br><span class="line">print(type(response))</span><br><span class="line">print(response.status_code)</span><br><span class="line">print(type(response.text))</span><br><span class="line">print(response.text)</span><br><span class="line">print(response.cookies)</span><br><span class="line">print(response.content)</span><br><span class="line">print(response.content.decode(&quot;utf-8&quot;))</span><br></pre></td></tr></table></figure>
+
+<p><strong>很多情况下的网站如果直接response.text会出现乱码的问题，所以这个使用response.content<br>这样返回的数据格式其实是二进制格式，然后通过decode()转换为utf-8，这样就解决了通过response.text直接返回显示乱码的问题.</strong></p>
+<h3 id="请求"><a href="#请求" class="headerlink" title="请求"></a>请求</h3><h3 id="基本GET请求"><a href="#基本GET请求" class="headerlink" title="基本GET请求"></a>基本GET请求</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">response &#x3D; requests.get(&#39;http:&#x2F;&#x2F;httpbin.org&#x2F;get&#39;)</span><br><span class="line">print(response.text)</span><br></pre></td></tr></table></figure>
+
+<h3 id="带参数的GET"><a href="#带参数的GET" class="headerlink" title="带参数的GET"></a>带参数的GET</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">response &#x3D; requests.get(&quot;http:&#x2F;&#x2F;httpbin.org&#x2F;get?name&#x3D;zhaofan&amp;age&#x3D;23&quot;)</span><br><span class="line">print(response.text)</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用params关键字传递参数</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import requests</span><br><span class="line">data &#x3D; &#123;</span><br><span class="line">    &quot;name&quot;:&quot;zhaofan&quot;,</span><br><span class="line">    &quot;age&quot;:22</span><br><span class="line">&#125;</span><br><span class="line">response &#x3D; requests.get(&quot;http:&#x2F;&#x2F;httpbin.org&#x2F;get&quot;,params&#x3D;data)</span><br><span class="line">print(response.url)</span><br><span class="line">print(response.text)</span><br></pre></td></tr></table></figure>
+
+<h3 id="解析json"><a href="#解析json" class="headerlink" title="解析json"></a><strong>解析json</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import json</span><br><span class="line"></span><br><span class="line">response &#x3D; requests.get(&quot;http:&#x2F;&#x2F;httpbin.org&#x2F;get&quot;)</span><br><span class="line">print(type(response.text))</span><br><span class="line">print(response.json())</span><br><span class="line">print(json.loads(response.text))</span><br><span class="line">print(type(response.json()))</span><br></pre></td></tr></table></figure>
+
+<p><strong>requests里面集成的json其实就是执行了json.loads()方法，两者的结果是一样的</strong></p>
+<h3 id="获取二进制数据"><a href="#获取二进制数据" class="headerlink" title="获取二进制数据"></a><strong>获取二进制数据</strong></h3><p>使用的response.content，这样获取的数据是二进制数据，同样的这个方法也可以用于下载图片以及<br>视频资源</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">response &#x3D; requests.get(&quot;https:&#x2F;&#x2F;github.com&#x2F;favicon.ico&quot;)</span><br><span class="line">with open(&#39;favicon.ico&#39;,&#39;ab&#39;)as f:</span><br><span class="line">    f.write(response.content)</span><br><span class="line">    f.close()</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="添加headers"><a href="#添加headers" class="headerlink" title="添加headers"></a>添加headers</h3><p>以知乎为例，以下脚本访问会出错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">response &#x3D;requests.get(&quot;https:&#x2F;&#x2F;www.zhihu.com&quot;)</span><br><span class="line">print(response.text)</span><br></pre></td></tr></table></figure>
+
+<p><strong>因为访问知乎需要头部信息，这个时候我们在谷歌浏览器里输入chrome://version,就可以看到用户代理，将用户代理添加到头部信息</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">headers &#x3D; &#123;</span><br><span class="line"></span><br><span class="line">    &quot;User-Agent&quot;:&quot;Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;58.0.3029.110 Safari&#x2F;537.36&quot;</span><br><span class="line">&#125;</span><br><span class="line">response &#x3D;requests.get(&quot;https:&#x2F;&#x2F;www.zhihu.com&quot;,headers&#x3D;headers)</span><br><span class="line"></span><br><span class="line">print(response.text)</span><br></pre></td></tr></table></figure>
+
+<h3 id="post"><a href="#post" class="headerlink" title="post"></a>post</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">data &#x3D; &#123;</span><br><span class="line">    &quot;name&quot;:&quot;zhaofan&quot;,</span><br><span class="line">    &quot;age&quot;:23</span><br><span class="line">&#125;</span><br><span class="line">response &#x3D; requests.post(&quot;http:&#x2F;&#x2F;httpbin.org&#x2F;post&quot;,data&#x3D;data)</span><br><span class="line">print(response.text)</span><br></pre></td></tr></table></figure>
+
+<p><strong>只修改了get和post 的区别</strong></p>
+<h3 id="响应"><a href="#响应" class="headerlink" title="响应"></a>响应</h3><p>可以通过response获得很多属性，例子如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">response &#x3D; requests.get(&quot;http:&#x2F;&#x2F;www.baidu.com&quot;)</span><br><span class="line">print(type(response.status_code),response.status_code)</span><br><span class="line">print(type(response.headers),response.headers)</span><br><span class="line">print(type(response.cookies),response.cookies)</span><br><span class="line">print(type(response.url),response.url)</span><br><span class="line">print(type(response.history),response.history)</span><br></pre></td></tr></table></figure>
+
+<h2 id="requests高级用法"><a href="#requests高级用法" class="headerlink" title="requests高级用法"></a>requests高级用法</h2><h3 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h3><p>实现方法和其他参数类似，也是构造一个字典然后通过files参数传递</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">files&#x3D; &#123;&quot;files&quot;:open(&quot;git.jpeg&quot;,&quot;rb&quot;)&#125;</span><br><span class="line">response &#x3D; requests.post(&quot;http:&#x2F;&#x2F;httpbin.org&#x2F;post&quot;,files&#x3D;files)</span><br><span class="line">print(response.text)</span><br></pre></td></tr></table></figure>
+
+<h3 id="获取cookie"><a href="#获取cookie" class="headerlink" title="获取cookie"></a>获取cookie</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">response &#x3D; requests.get(&quot;http:&#x2F;&#x2F;www.baidu.com&quot;)</span><br><span class="line">print(response.cookies)</span><br><span class="line"></span><br><span class="line">for key,value in response.cookies.items():</span><br><span class="line">    print(key+&quot;&#x3D;&quot;+value)</span><br></pre></td></tr></table></figure>
+
+<h3 id="会话维持"><a href="#会话维持" class="headerlink" title="会话维持"></a>会话维持</h3><p><strong>cookie的一个作用就是可以用于模拟登陆，做会话维持</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">s &#x3D; requests.Session()</span><br><span class="line">s.get(&quot;http:&#x2F;&#x2F;httpbin.org&#x2F;cookies&#x2F;set&#x2F;number&#x2F;123456&quot;)</span><br><span class="line">response &#x3D; s.get(&quot;http:&#x2F;&#x2F;httpbin.org&#x2F;cookies&quot;)</span><br><span class="line">print(response.text)</span><br></pre></td></tr></table></figure>
+
+<h3 id="证书验证"><a href="#证书验证" class="headerlink" title="证书验证"></a>证书验证</h3><p><strong>现在的很多网站都是https的方式访问，所以这个时候就涉及到证书的问题</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">from requests.packages import urllib3</span><br><span class="line">urllib3.disable_warnings()</span><br><span class="line">response &#x3D; requests.get(&quot;https:&#x2F;&#x2F;www.12306.cn&quot;,verify&#x3D;False)</span><br><span class="line">print(response.status_code)</span><br></pre></td></tr></table></figure>
+
+<h3 id="代理设置"><a href="#代理设置" class="headerlink" title="代理设置"></a><strong>代理设置</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">proxies&#x3D; &#123;</span><br><span class="line">    &quot;http&quot;:&quot;http:&#x2F;&#x2F;127.0.0.1:9999&quot;,</span><br><span class="line">    &quot;https&quot;:&quot;http:&#x2F;&#x2F;127.0.0.1:8888&quot;</span><br><span class="line">&#125;</span><br><span class="line">response  &#x3D; requests.get(&quot;https:&#x2F;&#x2F;www.baidu.com&quot;,proxies&#x3D;proxies)</span><br><span class="line">print(response.text)</span><br></pre></td></tr></table></figure>
+
+<p>如果代理需要设置账户名和密码,只需要将字典更改为如下：<br><code>proxies = {
+&quot;http&quot;:&quot;[http://user:password@127.0.0.1:9999](http://user:password@127.0.0.1:9999/)&quot;
+}</code><br>如果你的代理是通过sokces这种方式则需要pip install “requests[socks]”<br><code>proxies= {
+&quot;http&quot;:&quot;socks5://127.0.0.1:9999&quot;,
+&quot;https&quot;:&quot;sockes5://127.0.0.1:8888&quot;
+}</code></p>
+<h3 id="超时设置"><a href="#超时设置" class="headerlink" title="超时设置"></a>超时设置</h3><p>通过timeout参数可以设置超时的时间</p>
+<h3 id="认证设置"><a href="#认证设置" class="headerlink" title="认证设置"></a>认证设置</h3><p>如果碰到需要认证的网站可以通过requests.auth模块实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">from requests.auth import HTTPBasicAuth</span><br><span class="line"></span><br><span class="line">response &#x3D; requests.get(&quot;http:&#x2F;&#x2F;120.27.34.24:9001&#x2F;&quot;,auth&#x3D;HTTPBasicAuth(&quot;user&quot;,&quot;123&quot;))</span><br><span class="line">print(response.status_code)</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">response &#x3D; requests.get(&quot;http:&#x2F;&#x2F;120.27.34.24:9001&#x2F;&quot;,auth&#x3D;(&quot;user&quot;,&quot;123&quot;))</span><br><span class="line">print(response.status_code)</span><br></pre></td></tr></table></figure>
+
+<h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><p><strong>关于reqeusts的异常在这里可以看到详细内容：</strong></p>
+<p><a href="http://www.python-requests.org/en/master/api/#exceptions" target="_blank" rel="noopener">http://www.python-requests.org/en/master/api/#exceptions</a></p>
+<p><strong>所有的异常都是在requests.excepitons中</strong></p>
+<p>简单演示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">from requests.exceptions import ReadTimeout,ConnectionError,RequestException</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    response &#x3D; requests.get(&quot;http:&#x2F;&#x2F;httpbin.org&#x2F;get&quot;,timout&#x3D;0.1)</span><br><span class="line">    print(response.status_code)</span><br><span class="line">except ReadTimeout:</span><br><span class="line">    print(&quot;timeout&quot;)</span><br><span class="line">except ConnectionError:</span><br><span class="line">    print(&quot;connection Error&quot;)</span><br><span class="line">except RequestException:</span><br><span class="line">    print(&quot;error&quot;)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="Beautiful-Soup的用法"><a href="#Beautiful-Soup的用法" class="headerlink" title="Beautiful Soup的用法"></a>Beautiful Soup的用法</h2><p><strong>解析器</strong></p>
+<table>
+<thead>
+<tr>
+<th>解析器</th>
+<th>使用方法</th>
+<th>优势</th>
+<th>劣势</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Python标准库</td>
+<td>BeautifulSoup(markup, “html.parser”)</td>
+<td>Python的内置标准库、执行速度适中、文档容错能力强</td>
+<td>Python 2.7.3及Python 3.2.2之前的版本文档容错能力差</td>
+</tr>
+<tr>
+<td>xml HTML解析器</td>
+<td>BeautifulSoup(markup, “lxml”)</td>
+<td>速度快、文档容错能力强</td>
+<td>需要安装C语言库</td>
+</tr>
+<tr>
+<td>lxml XML解析器</td>
+<td>BeautifulSoup(markup, “xml”)</td>
+<td>速度快、唯一支持XML的解析器</td>
+<td>需要安装C语言库</td>
+</tr>
+<tr>
+<td>html5lib</td>
+<td>BeautifulSoup(markup, “html5lib”)</td>
+<td>最好的容错性、以浏览器的方式解析文档、生成HTML5格式的文档</td>
+<td>速度慢、不依赖外部扩展</td>
+</tr>
+</tbody></table>
+<p>lxml解析器有解析HTML和XML的功能，而且速度快，容错能力强，所以推荐使用它。</p>
+<p><strong>初始化Beautiful Soup</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">soup &#x3D; BeautifulSoup(&#39;&lt;p&gt;Hello&lt;&#x2F;p&gt;&#39;, &#39;lxml&#39;)</span><br><span class="line">print(soup.p.string)</span><br></pre></td></tr></table></figure>
+
+<p><strong>基本用法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">html &#x3D; &quot;&quot;&quot;</span><br><span class="line">&lt;html&gt;&lt;head&gt;&lt;title&gt;The Dormouse&#39;s story&lt;&#x2F;title&gt;&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;p class&#x3D;&quot;title&quot; name&#x3D;&quot;dromouse&quot;&gt;&lt;b&gt;The Dormouse&#39;s story&lt;&#x2F;b&gt;&lt;&#x2F;p&gt;</span><br><span class="line">&lt;p class&#x3D;&quot;story&quot;&gt;Once upon a time there were three little sisters; and their names were</span><br><span class="line">&lt;a href&#x3D;&quot;http:&#x2F;&#x2F;example.com&#x2F;elsie&quot; class&#x3D;&quot;sister&quot; id&#x3D;&quot;link1&quot;&gt;&lt;!-- Elsie --&gt;&lt;&#x2F;a&gt;,</span><br><span class="line">&lt;a href&#x3D;&quot;http:&#x2F;&#x2F;example.com&#x2F;lacie&quot; class&#x3D;&quot;sister&quot; id&#x3D;&quot;link2&quot;&gt;Lacie&lt;&#x2F;a&gt; and</span><br><span class="line">&lt;a href&#x3D;&quot;http:&#x2F;&#x2F;example.com&#x2F;tillie&quot; class&#x3D;&quot;sister&quot; id&#x3D;&quot;link3&quot;&gt;Tillie&lt;&#x2F;a&gt;;</span><br><span class="line">and they lived at the bottom of a well.&lt;&#x2F;p&gt;</span><br><span class="line">&lt;p class&#x3D;&quot;story&quot;&gt;...&lt;&#x2F;p&gt;</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">soup &#x3D; BeautifulSoup(html, &#39;lxml&#39;)	#使用lxml解析器解析完成后赋值给soup变量</span><br><span class="line">print(soup.prettify()）	#调用prettify()方法。这个方法可以把要解析的字符串以标准的缩进格式输出。即自动更正格式</span><br><span class="line">print(soup.title.string)	#输出HTML中title节点的文本内容</span><br></pre></td></tr></table></figure>
+
+<p><strong>详细选择元素</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;title&gt;The Dormouse&#39;s story&lt;&#x2F;title&gt;</span><br><span class="line">&lt;class &#39;bs4.element.Tag&#39;&gt;</span><br><span class="line">The Dormouse&#39;s story</span><br><span class="line">&lt;head&gt;&lt;title&gt;The Dormouse&#39;s story&lt;&#x2F;title&gt;&lt;&#x2F;head&gt;</span><br><span class="line">&lt;p class&#x3D;&quot;title&quot; name&#x3D;&quot;dromouse&quot;&gt;&lt;b&gt;The Dormouse&#39;s story&lt;&#x2F;b&gt;&lt;&#x2F;p&gt;	#当有多个节点时，这种选择方式只会选择到第一个匹配的节点</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>获取名称</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(soup.title.name)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">title</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取属性</p>
+<p>每个节点可能有多个属性，比如id和class等，选择这个节点元素后，可以调用attrs获取所有属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(soup.p.attrs)</span><br><span class="line">print(soup.p.attrs[&#39;name&#39;])</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#39;class&#39;: [&#39;title&#39;], &#39;name&#39;: &#39;dromouse&#39;&#125;</span><br><span class="line">dromouse</span><br></pre></td></tr></table></figure>
+
+<p>简写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(soup.p[&#39;name&#39;])</span><br><span class="line">print(soup.p[&#39;class&#39;])</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>关联选择</p>
+<p>返回p的直接子节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">soup &#x3D; BeautifulSoup(html, &#39;lxml&#39;)</span><br><span class="line">print(soup.p.children)</span><br><span class="line">for i, child in enumerate(soup.p.children):</span><br><span class="line">    print(i, child)</span><br></pre></td></tr></table></figure>
+
+<p>返回p的所有子孙节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">soup &#x3D; BeautifulSoup(html, &#39;lxml&#39;)</span><br><span class="line">print(soup.p.descendants)</span><br><span class="line">for i, child in enumerate(soup.p.descendants):</span><br><span class="line">    print(i, child)</span><br></pre></td></tr></table></figure>
+
+<p>父节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">soup &#x3D; BeautifulSoup(html, &#39;lxml&#39;)</span><br><span class="line">print(soup.a.parent)</span><br></pre></td></tr></table></figure>
+
+<p>所有祖先节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">soup &#x3D; BeautifulSoup(html, &#39;lxml&#39;)</span><br><span class="line">#print(type(soup.a.parents))</span><br><span class="line">print(list(enumerate(soup.a.parents)))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>兄弟节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">soup &#x3D; BeautifulSoup(html, &#39;lxml&#39;)</span><br><span class="line">print(&#39;Next Sibling&#39;, soup.a.next_sibling)</span><br><span class="line">print(&#39;Prev Sibling&#39;, soup.a.previous_sibling)</span><br><span class="line">print(&#39;Next Siblings&#39;, list(enumerate(soup.a.next_siblings)))</span><br><span class="line">print(&#39;Prev Siblings&#39;, list(enumerate(soup.a.previous_siblings)))</span><br></pre></td></tr></table></figure>
+
+<p>*<em>其中next_sibling和previous_sibling分别获取节点的下一个和上一个兄弟元素，next_siblings和previous_siblings则分别返回所有前面和后面的兄弟节点的生成器。 *</em></p>
+</li>
+<li><p>提取信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">html &#x3D; &quot;&quot;&quot;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;body&gt;</span><br><span class="line">    &lt;p&gt;</span><br><span class="line">        &lt;p class&#x3D;&quot;story&quot;&gt;</span><br><span class="line">            Once upon a time there were three little sisters; and their names were</span><br><span class="line">            &lt;a href&#x3D;&quot;http:&#x2F;&#x2F;example.com&#x2F;elsie&quot; class&#x3D;&quot;sister&quot; id&#x3D;&quot;link1&quot;&gt;Bob&lt;&#x2F;a&gt;&lt;a href&#x3D;&quot;http:&#x2F;&#x2F;example.com&#x2F;lacie&quot; class&#x3D;&quot;sister&quot; id&#x3D;&quot;link2&quot;&gt;Lacie&lt;&#x2F;a&gt; </span><br><span class="line">        &lt;&#x2F;p&gt;</span><br><span class="line">    &lt;p&gt;</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">soup &#x3D; BeautifulSoup(html, &#39;lxml&#39;)</span><br><span class="line">print(&#39;Next Sibling:&#39;)</span><br><span class="line">print(type(soup.a.next_sibling))</span><br><span class="line">print(soup.a.next_sibling)</span><br><span class="line">print(soup.a.next_sibling.string)</span><br><span class="line">print(&#39;Parent:&#39;)</span><br><span class="line">print(type(soup.a.parents))</span><br><span class="line">print(list(soup.a.parents)[0])</span><br><span class="line">print(list(soup.a.parents)[0].attrs[&#39;class&#39;])</span><br></pre></td></tr></table></figure>
+
+<p>结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Next Sibling:</span><br><span class="line">&lt;class &#39;bs4.element.Tag&#39;&gt;</span><br><span class="line">&lt;a class&#x3D;&quot;sister&quot; href&#x3D;&quot;http:&#x2F;&#x2F;example.com&#x2F;lacie&quot; id&#x3D;&quot;link2&quot;&gt;Lacie&lt;&#x2F;a&gt;</span><br><span class="line">Lacie</span><br><span class="line">Parent:</span><br><span class="line">&lt;class &#39;generator&#39;&gt;</span><br><span class="line">&lt;p class&#x3D;&quot;story&quot;&gt;</span><br><span class="line">            Once upon a time there were three little sisters; and their names were</span><br><span class="line">            &lt;a class&#x3D;&quot;sister&quot; href&#x3D;&quot;http:&#x2F;&#x2F;example.com&#x2F;elsie&quot; id&#x3D;&quot;link1&quot;&gt;Bob&lt;&#x2F;a&gt;&lt;a class&#x3D;&quot;sister&quot; href&#x3D;&quot;http:&#x2F;&#x2F;example.com&#x2F;lacie&quot; id&#x3D;&quot;link2&quot;&gt;Lacie&lt;&#x2F;a&gt;</span><br><span class="line">&lt;&#x2F;p&gt;</span><br><span class="line">[&#39;story&#39;]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法选择器</p>
+<p><strong>find_all()</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find_all(name , attrs , recursive , text , **kwargs)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">soup &#x3D; BeautifulSoup(html, &#39;lxml&#39;)</span><br><span class="line">print(soup.find_all(name&#x3D;&#39;ul&#39;))</span><br><span class="line">print(type(soup.find_all(name&#x3D;&#39;ul&#39;)[0]))</span><br></pre></td></tr></table></figure>
+
+<p><strong>嵌套查询</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for ul in soup.find_all(name&#x3D;&#39;ul&#39;):</span><br><span class="line">    print(ul.find_all(name&#x3D;&#39;li&#39;))</span><br><span class="line">    for li in ul.find_all(name&#x3D;&#39;li&#39;):</span><br><span class="line">        print(li.string)</span><br></pre></td></tr></table></figure>
+
+<p><strong>attrs</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">soup &#x3D; BeautifulSoup(html, &#39;lxml&#39;)</span><br><span class="line">print(soup.find_all(attrs&#x3D;&#123;&#39;id&#39;: &#39;list-1&#39;&#125;))</span><br><span class="line">print(soup.find_all(attrs&#x3D;&#123;&#39;name&#39;: &#39;elements&#39;&#125;))</span><br></pre></td></tr></table></figure>
+
+<p><strong>text</strong></p>
+<p>text参数可用来匹配节点的文本，传入的形式可以是字符串，可以是正则表达式对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">soup &#x3D; BeautifulSoup(html, &#39;lxml&#39;)</span><br><span class="line">print(soup.find_all(text&#x3D;re.compile(&#39;link&#39;)))</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">find_parents()和find_parent()：前者返回所有祖先节点，后者返回直接父节点。 </span><br><span class="line">find_next_siblings()和find_next_sibling()：前者返回后面所有的兄弟节点，后者返回后面第一个兄弟节点。 </span><br><span class="line">find_previous_siblings()和find_previous_sibling()：前者返回前面所有的兄弟节点，后者返回前面第一个兄弟节点。 </span><br><span class="line">find_all_next()和find_next()：前者返回节点后所有符合条件的节点，后者返回第一个符合条件的节点。 </span><br><span class="line">find_all_previous()和find_previous()：前者返回节点后所有符合条件的节点，后者返回第一个符合条件的节点。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>css选择器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">soup &#x3D; BeautifulSoup(html, &#39;lxml&#39;)</span><br><span class="line">print(soup.select(&#39;.panel .panel-heading&#39;))</span><br><span class="line">print(soup.select(&#39;ul li&#39;))</span><br><span class="line">print(soup.select(&#39;#list-2 .element&#39;))</span><br><span class="line">print(type(soup.select(&#39;ul&#39;)[0]))</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<h2 id="selenium"><a href="#selenium" class="headerlink" title="selenium"></a>selenium</h2><p><strong>声明浏览器对象</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line"></span><br><span class="line">browser &#x3D; webdriver.Chrome()</span><br><span class="line">browser &#x3D; webdriver.Firefox()</span><br></pre></td></tr></table></figure>
+
+<p><strong>访问页面</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line"></span><br><span class="line">browser &#x3D; webdriver.Chrome()</span><br><span class="line"></span><br><span class="line">browser.get(&quot;http:&#x2F;&#x2F;www.baidu.com&quot;)</span><br><span class="line">print(browser.page_source)</span><br><span class="line">browser.close()</span><br></pre></td></tr></table></figure>
+
+<p><strong>查找单个元素</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line"></span><br><span class="line">browser &#x3D; webdriver.Chrome()</span><br><span class="line"></span><br><span class="line">browser.get(&quot;http:&#x2F;&#x2F;www.taobao.com&quot;)</span><br><span class="line">input_first &#x3D; browser.find_element_by_id(&quot;q&quot;)</span><br><span class="line">input_second &#x3D; browser.find_element_by_css_selector(&quot;#q&quot;)</span><br><span class="line">input_third &#x3D; browser.find_element_by_xpath(&#39;&#x2F;&#x2F;*[@id&#x3D;&quot;q&quot;]&#39;)</span><br><span class="line">print(input_first)</span><br><span class="line">print(input_second)</span><br><span class="line">print(input_third)</span><br><span class="line">browser.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">这里列举一下常用的查找元素方法：</span><br><span class="line"></span><br><span class="line">find_element_by_name</span><br><span class="line">find_element_by_id</span><br><span class="line">find_element_by_xpath</span><br><span class="line">find_element_by_link_text</span><br><span class="line">find_element_by_partial_link_text</span><br><span class="line">find_element_by_tag_name</span><br><span class="line">find_element_by_class_name</span><br><span class="line">find_element_by_css_selector</span><br></pre></td></tr></table></figure>
+
+<p><strong>比较通用的一种</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line"></span><br><span class="line">from selenium.webdriver.common.by import By</span><br><span class="line"></span><br><span class="line">browser &#x3D; webdriver.Chrome()</span><br><span class="line"></span><br><span class="line">browser.get(&quot;http:&#x2F;&#x2F;www.taobao.com&quot;)</span><br><span class="line">input_first &#x3D; browser.find_element(By.ID,&quot;q&quot;)</span><br><span class="line">print(input_first)</span><br><span class="line">browser.close()</span><br></pre></td></tr></table></figure>
+
+<p><strong>查找多个元素</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">browser &#x3D; webdriver.Chrome()</span><br><span class="line">browser.get(&quot;http:&#x2F;&#x2F;www.taobao.com&quot;)</span><br><span class="line">lis &#x3D; browser.find_elements_by_css_selector(&#39;.service-bd li&#39;)</span><br><span class="line">print(lis)</span><br><span class="line">browser.close()</span><br></pre></td></tr></table></figure>
+
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io.git">JiangNiao</a>
+            <p>原文链接：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io.git/2019/06/11/python%E7%88%AC%E8%99%AB%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0/">https://github.com/Jiang-Niao/Jiang-Niao.github.io.git/2019/06/11/python%E7%88%AC%E8%99%AB%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0/</a>
+            <p>发表日期：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io.git/2019/06/11/python%E7%88%AC%E8%99%AB%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0/">June 11th 2019, 11:57:28 am</a>
+            <p>更新日期：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io.git/2019/06/11/python%E7%88%AC%E8%99%AB%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0/">March 31st 2020, 3:37:48 pm</a>
+            <p>版权声明：本文采用<a rel="license noopener" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2019/07/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" title= "浅析文件上传">
+                    <div class="nextTitle">浅析文件上传</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2019/06/11/hello-world/" title= "在搭建博客的问题解决方案以及优化">
+                    <div class="prevTitle">在搭建博客的问题解决方案以及优化</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- gitalk评论 -->
+
+    <!-- utteranc评论 -->
+
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:jiangniao66@163.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="https://github.com/Jiang-Niao" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#python爬虫简单学习"><span class="toc-number">1.</span> <span class="toc-text">python爬虫简单学习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#句子含义"><span class="toc-number">1.1.</span> <span class="toc-text">句子含义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总体功能的一个演示"><span class="toc-number">1.2.</span> <span class="toc-text">总体功能的一个演示</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#请求"><span class="toc-number">1.2.1.</span> <span class="toc-text">请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基本GET请求"><span class="toc-number">1.2.2.</span> <span class="toc-text">基本GET请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#带参数的GET"><span class="toc-number">1.2.3.</span> <span class="toc-text">带参数的GET</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解析json"><span class="toc-number">1.2.4.</span> <span class="toc-text">解析json</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取二进制数据"><span class="toc-number">1.2.5.</span> <span class="toc-text">获取二进制数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加headers"><span class="toc-number">1.2.6.</span> <span class="toc-text">添加headers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#post"><span class="toc-number">1.2.7.</span> <span class="toc-text">post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#响应"><span class="toc-number">1.2.8.</span> <span class="toc-text">响应</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#requests高级用法"><span class="toc-number">1.3.</span> <span class="toc-text">requests高级用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#文件上传"><span class="toc-number">1.3.1.</span> <span class="toc-text">文件上传</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取cookie"><span class="toc-number">1.3.2.</span> <span class="toc-text">获取cookie</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#会话维持"><span class="toc-number">1.3.3.</span> <span class="toc-text">会话维持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#证书验证"><span class="toc-number">1.3.4.</span> <span class="toc-text">证书验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代理设置"><span class="toc-number">1.3.5.</span> <span class="toc-text">代理设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#超时设置"><span class="toc-number">1.3.6.</span> <span class="toc-text">超时设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#认证设置"><span class="toc-number">1.3.7.</span> <span class="toc-text">认证设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异常处理"><span class="toc-number">1.3.8.</span> <span class="toc-text">异常处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Beautiful-Soup的用法"><span class="toc-number">1.4.</span> <span class="toc-text">Beautiful Soup的用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#selenium"><span class="toc-number">1.5.</span> <span class="toc-text">selenium</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 17
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/03/24/PHP%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%97%E7%AC%A6%E9%80%83%E9%80%B8/" >php反序列化字符逃逸</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/MRCTF-web/" >MRCTF部分web</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/sqli-labs%E7%BB%83%E4%B9%A0/" >sqli-labs练习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/12</span><a class="archive-post-title" href= "/2019/11/12/UNCTF%E5%AE%89%E6%81%92%E5%A4%8D%E7%8E%B0/" >UNCTF的赛后复现</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2019/11/04/%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5/" >堆叠注入的简单学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/29</span><a class="archive-post-title" href= "/2019/10/29/RSA%E5%88%9D%E6%8E%A2/" >初识RSA （持续更新）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/18</span><a class="archive-post-title" href= "/2019/10/18/HCTF2018%20WarmUp%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A/" >HCTF2018 （持续更新）</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/01/20/docker%E5%BB%BA%E7%AB%8Bphp+mysql+apache%E7%9A%84web%E7%8E%AF%E5%A2%83/" >docker建立php+mysql+apache的web环境</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/06/11/hello-world/" >在搭建博客的问题解决方案以及优化</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/11</span><a class="archive-post-title" href= "/2019/09/11/sql%E6%B3%A8%E5%85%A5%E6%B5%85%E6%9E%90/" >sql注入浅析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/11</span><a class="archive-post-title" href= "/2019/07/11/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" >ctf中的php反序列化</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/06/11/python%E7%88%AC%E8%99%AB%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0/" >python爬虫简单学习</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2019/07/17/%E5%90%84%E7%A7%8D%E6%83%85%E5%86%B5%E5%8F%8D%E5%BC%B9shell/" >各种情况下反弹shell</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/07/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" >浅析文件上传</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/09/22/%E5%AF%86%E7%A0%81%E5%AD%A6/" >古典古典密码</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2020/03/14/%E6%B1%9F%E9%B8%9F2020.3%20awd%E8%AE%B0%E5%BD%95/" >2020.3 awd记录</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/10/18/%E6%A8%A1%E7%89%88%E6%B3%A8%E5%85%A5/" >模版注入</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="web"><span class="iconfont-archer">&#xe606;</span>web</span>
+    
+        <span class="sidebar-tag-name" data-tags="ctf"><span class="iconfont-archer">&#xe606;</span>ctf</span>
+    
+        <span class="sidebar-tag-name" data-tags="crypto"><span class="iconfont-archer">&#xe606;</span>crypto</span>
+    
+        <span class="sidebar-tag-name" data-tags="docker"><span class="iconfont-archer">&#xe606;</span>docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="入门"><span class="iconfont-archer">&#xe606;</span>入门</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="web"><span class="iconfont-archer">&#xe60a;</span>web</span>
+    
+        <span class="sidebar-category-name" data-categories="crypto"><span class="iconfont-archer">&#xe60a;</span>crypto</span>
+    
+        <span class="sidebar-category-name" data-categories="docker"><span class="iconfont-archer">&#xe60a;</span>docker</span>
+    
+        <span class="sidebar-category-name" data-categories="awd"><span class="iconfont-archer">&#xe60a;</span>awd</span>
+    
+        <span class="sidebar-category-name" data-categories="awd/web"><span class="iconfont-archer">&#xe60a;</span>awd/web</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "JiangNiao"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
