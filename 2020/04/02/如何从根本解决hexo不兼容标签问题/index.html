@@ -20,22 +20,20 @@
     <meta name="keywords" content="hexo,网络安全,hexo-blog">
     
     <meta name="description" content="一起努力">
-    <meta name="description" content="这是Apache的,之后更新Nginx">
+    <meta name="description" content="如何从根本解决hexo不兼容标签问题报错123INFO  Start processingFATAL Something&#39;s wrong. Maybe you can find the solution here: https:&#x2F;&#x2F;hexo.io&#x2F;docs&#x2F;troubleshooting.htmlNunjucks Error:  [Line 96,">
 <meta property="og:type" content="article">
-<meta property="og:title" content="docker建立php+mysql+apache的web环境">
-<meta property="og:url" content="https://github.com/Jiang-Niao/Jiang-Niao.github.io.git/2020/01/20/docker%E5%BB%BA%E7%AB%8Bphp+mysql+apache%E7%9A%84web%E7%8E%AF%E5%A2%83/index.html">
+<meta property="og:title" content="如何从根本解决hexo不兼容标签问题">
+<meta property="og:url" content="https://github.com/Jiang-Niao/Jiang-Niao.github.io.git/2020/04/02/%E5%A6%82%E4%BD%95%E4%BB%8E%E6%A0%B9%E6%9C%AC%E8%A7%A3%E5%86%B3hexo%E4%B8%8D%E5%85%BC%E5%AE%B9%E6%A0%87%E7%AD%BE%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="JiangNiao&#39;s Bolg">
-<meta property="og:description" content="这是Apache的,之后更新Nginx">
-<meta property="article:published_time" content="2020-01-20T03:59:02.755Z">
-<meta property="article:modified_time" content="2020-03-31T05:16:06.810Z">
+<meta property="og:description" content="如何从根本解决hexo不兼容标签问题报错123INFO  Start processingFATAL Something&#39;s wrong. Maybe you can find the solution here: https:&#x2F;&#x2F;hexo.io&#x2F;docs&#x2F;troubleshooting.htmlNunjucks Error:  [Line 96,">
+<meta property="article:published_time" content="2020-04-02T10:20:42.286Z">
+<meta property="article:modified_time" content="2020-04-02T10:32:14.010Z">
 <meta property="article:author" content="JiangNiao">
-<meta property="article:tag" content="web">
-<meta property="article:tag" content="docker">
 <meta name="twitter:card" content="summary">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     
-    <title>docker建立php+mysql+apache的web环境 · Jiang-Niao&#39;s Blog</title>
+    <title>如何从根本解决hexo不兼容标签问题 · Jiang-Niao&#39;s Blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -230,7 +228,7 @@
                 <a href="/" >Jiang-Niao&#39;s Blog</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">docker建立php+mysql+apache的web环境</a>
+                <a href="#" class="post-name">如何从根本解决hexo不兼容标签问题</a>
             </div>
     </div>
     
@@ -260,7 +258,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            docker建立php+mysql+apache的web环境
+            如何从根本解决hexo不兼容标签问题
             <!-- 404 -->
             
         </h1>
@@ -277,22 +275,14 @@ height:50vh;
             <div class="post-intros">
                 <!-- 文章页标签  -->
                 
-                    <div class= post-intro-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "web">web</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "docker">docker</a>
-    
-</div>
-                
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">278</span>阅读时长: <span class="post-count reading-time">1 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">508</span>阅读时长: <span class="post-count reading-time">2 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2020/01/20</span>
+                    <span class="post-intro-time">2020/04/02</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -416,29 +406,36 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <p>这是Apache的,之后更新Nginx</p>
-<a id="more"></a>
-<p>php文件夹内需要写Dockfile</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">FROM php:7.1-apache</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RUN docker-php-ext-install pdo pdo_mysql mysqli</span><br><span class="line">RUN docker-php-ext-enable mysqli </span><br><span class="line"></span><br><span class="line">ENV COMPOSER_ALLOW_SUPERUSER 1</span><br><span class="line">ENV COMPOSER_HOME &#x2F;tmp</span><br><span class="line">ENV COMPOSER_VERSION 1.5.1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">VOLUME &#x2F;var&#x2F;www&#x2F;html</span><br><span class="line">WORKDIR &#x2F;var&#x2F;www&#x2F;html</span><br></pre></td></tr></table></figure>
+        <h1 id="如何从根本解决hexo不兼容标签问题"><a href="#如何从根本解决hexo不兼容标签问题" class="headerlink" title="如何从根本解决hexo不兼容标签问题"></a>如何从根本解决hexo不兼容标签问题</h1><h2 id="报错"><a href="#报错" class="headerlink" title="报错"></a>报错</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">INFO  Start processing</span><br><span class="line">FATAL Something&#39;s wrong. Maybe you can find the solution here: https:&#x2F;&#x2F;hexo.io&#x2F;docs&#x2F;troubleshooting.html</span><br><span class="line">Nunjucks Error:  [Line 96, Column 110] expected name as lookup value, got .</span><br></pre></td></tr></table></figure>
 
-<p>如果没有<code>RUN docker-php-ext-install pdo pdo_mysql mysqli
-RUN docker-php-ext-enable mysqli</code>的话，会出现报错提示没有mysqli。</p>
-<p>php-fpm.conf</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">[www]</span><br><span class="line"></span><br><span class="line">user &#x3D; www-data</span><br><span class="line">group &#x3D; www-data</span><br><span class="line">listen &#x3D; 127.0.0.1:9000</span><br><span class="line">pm &#x3D; dynamic</span><br><span class="line">pm.max_children &#x3D; 50</span><br><span class="line"></span><br><span class="line">; The number of child processes created on startup.</span><br><span class="line">; Note: Used only when pm is set to &#39;dynamic&#39;</span><br><span class="line">; Default Value: min_spare_servers + (max_spare_servers - min_spare_servers) &#x2F; 2</span><br><span class="line">pm.start_servers &#x3D; 7</span><br><span class="line"></span><br><span class="line">; The desired minimum number of idle server processes.</span><br><span class="line">; Note: Used only when pm is set to &#39;dynamic&#39;</span><br><span class="line">; Note: Mandatory when pm is set to &#39;dynamic&#39;</span><br><span class="line">pm.min_spare_servers &#x3D; 5</span><br><span class="line"></span><br><span class="line">; The desired maximum number of idle server processes.</span><br><span class="line">; Note: Used only when pm is set to &#39;dynamic&#39;</span><br><span class="line">; Note: Mandatory when pm is set to &#39;dynamic&#39;</span><br><span class="line">pm.max_spare_servers &#x3D; 9</span><br><span class="line"></span><br><span class="line">pm.max_requests &#x3D; 5000</span><br><span class="line"></span><br><span class="line">pm.status_path &#x3D; &#x2F;fpm-status.php</span><br></pre></td></tr></table></figure>
+<p>出现这个情况一般是因为Markdown文件中有标签与<code>nunjucks</code>模板引擎的标签冲突了，这些标签都是模板引擎的，如果Markdown文件中有这些标签，那么在解析的是就会把Markdown中的标签动态解析了。通常情况下是不允许的。</p>
+<p>这里提供几个方案</p>
+<h2 id="方案一"><a href="#方案一" class="headerlink" title="方案一"></a>方案一</h2><p>当然是最简单的，把博客卸载不用了！！！🐶</p>
+<p>开玩笑，其实是使用标签进行处理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% raw %&#125;</span><br><span class="line">&#123;&#123;&#125;&#125;</span><br><span class="line">&#123;% endraw %&#125;</span><br></pre></td></tr></table></figure>
 
-<p> php.ini</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">date.timezone &#x3D; &quot;Asia&#x2F;Shanghai&quot;</span><br><span class="line">display_errors &#x3D; On</span><br><span class="line">error_reporting &#x3D; E_ALL</span><br><span class="line">short_open_tag&#x3D;Off</span><br><span class="line">upload_max_filesize &#x3D; 50M</span><br><span class="line">post_max_size &#x3D; 50M</span><br><span class="line">memory_limit&#x3D;512M</span><br></pre></td></tr></table></figure>
+<p>这样，但是这样使用有一个麻烦的点，经过我的测试，只能在小部分的地方比如只包括代码，如果大面积的使用会导致其他标签失效，比如说<code>##</code>，所以一般不采用这样方法</p>
+<h2 id="方案二"><a href="#方案二" class="headerlink" title="方案二"></a>方案二</h2><p>半永久方法，修改配置文件</p>
+<p>直接修改<code>nunjucks</code>模板的源代码，找到如下文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node_modules&#x2F;nunjucks&#x2F;src&#x2F;lexer.js</span><br></pre></td></tr></table></figure>
 
-<p>src文件夹内就放内容就可以了，如果是一些src，那么需要修改文件夹的路径，在<code>var/www/html/public</code>应该就可以了。</p>
+<p>在文件的开头可以看到如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">;</span><br><span class="line"></span><br><span class="line">var lib &#x3D; require(&#39;.&#x2F;lib&#39;);</span><br><span class="line"></span><br><span class="line">var whitespaceChars &#x3D; &quot; ntrxA0&quot;;</span><br><span class="line">var delimChars &#x3D; &#39;()[]&#123;&#125;%*-+~&#x2F;#,:|.&lt;&gt;&#x3D;!&#39;;</span><br><span class="line">var intChars &#x3D; &#39;0123456789&#39;;</span><br><span class="line">var BLOCK_START &#x3D; &#39;&#123;%&#39;;</span><br><span class="line">var BLOCK_END &#x3D; &#39;%&#125;&#39;;</span><br><span class="line">var VARIABLE_START &#x3D; &#39;&#123;$&#39;;</span><br><span class="line">var VARIABLE_END &#x3D; &#39;$&#125;&#39;;</span><br><span class="line">var COMMENT_START &#x3D; &#39;&#123;@&#39;;</span><br><span class="line">var COMMENT_END &#x3D; &#39;@&#125;&#39;;</span><br><span class="line">var TOKEN_STRING &#x3D; &#39;string&#39;;</span><br></pre></td></tr></table></figure>
+
+<p>可以直接改了这些渲染标签，比如我的Markdown文件中就是需要显示<code>{{name}}</code>这一类代码。那么你可以这么做：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var VARIABLE_START &#x3D; &#39;&#123;$&#39;;</span><br><span class="line">var VARIABLE_END &#x3D; &#39;$&#125;&#39;;</span><br></pre></td></tr></table></figure>
+
+<p>把模板引擎的占位符修改为其他字符之后，这样模板解析的时候就不会跟你的Markdown内容冲突了，而且是对所有Markdown文件都有效的。</p>
+<p>但是这个方法在进行模版的更新之后就会失效，所以是半永久</p>
 
     </article>
     <!-- license  -->
     
         <div class="license-wrapper">
             <p>原文作者：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io.git">JiangNiao</a>
-            <p>原文链接：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io.git/2020/01/20/docker%E5%BB%BA%E7%AB%8Bphp+mysql+apache%E7%9A%84web%E7%8E%AF%E5%A2%83/">https://github.com/Jiang-Niao/Jiang-Niao.github.io.git/2020/01/20/docker%E5%BB%BA%E7%AB%8Bphp+mysql+apache%E7%9A%84web%E7%8E%AF%E5%A2%83/</a>
-            <p>发表日期：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io.git/2020/01/20/docker%E5%BB%BA%E7%AB%8Bphp+mysql+apache%E7%9A%84web%E7%8E%AF%E5%A2%83/">January 20th 2020, 11:59:02 am</a>
-            <p>更新日期：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io.git/2020/01/20/docker%E5%BB%BA%E7%AB%8Bphp+mysql+apache%E7%9A%84web%E7%8E%AF%E5%A2%83/">March 31st 2020, 1:16:06 pm</a>
+            <p>原文链接：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io.git/2020/04/02/%E5%A6%82%E4%BD%95%E4%BB%8E%E6%A0%B9%E6%9C%AC%E8%A7%A3%E5%86%B3hexo%E4%B8%8D%E5%85%BC%E5%AE%B9%E6%A0%87%E7%AD%BE%E9%97%AE%E9%A2%98/">https://github.com/Jiang-Niao/Jiang-Niao.github.io.git/2020/04/02/%E5%A6%82%E4%BD%95%E4%BB%8E%E6%A0%B9%E6%9C%AC%E8%A7%A3%E5%86%B3hexo%E4%B8%8D%E5%85%BC%E5%AE%B9%E6%A0%87%E7%AD%BE%E9%97%AE%E9%A2%98/</a>
+            <p>发表日期：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io.git/2020/04/02/%E5%A6%82%E4%BD%95%E4%BB%8E%E6%A0%B9%E6%9C%AC%E8%A7%A3%E5%86%B3hexo%E4%B8%8D%E5%85%BC%E5%AE%B9%E6%A0%87%E7%AD%BE%E9%97%AE%E9%A2%98/">April 2nd 2020, 6:20:42 pm</a>
+            <p>更新日期：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io.git/2020/04/02/%E5%A6%82%E4%BD%95%E4%BB%8E%E6%A0%B9%E6%9C%AC%E8%A7%A3%E5%86%B3hexo%E4%B8%8D%E5%85%BC%E5%AE%B9%E6%A0%87%E7%AD%BE%E9%97%AE%E9%A2%98/">April 2nd 2020, 6:32:14 pm</a>
             <p>版权声明：本文采用<a rel="license noopener" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -446,17 +443,12 @@ RUN docker-php-ext-enable mysqli</code>的话，会出现报错提示没有mysql
     <ul class="post-paginator">
         <li class="next">
             
-                <div class="nextSlogan">Next Post</div>
-                <a href= "/2020/03/14/%E6%B1%9F%E9%B8%9F2020.3%20awd%E8%AE%B0%E5%BD%95/" title= "2020.3 awd记录">
-                    <div class="nextTitle">2020.3 awd记录</div>
-                </a>
-            
         </li>
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href= "/2019/12/08/sqli-labs%E7%BB%83%E4%B9%A0/" title= "sqli-labs练习">
-                    <div class="prevTitle">sqli-labs练习</div>
+                <a href= "/2020/04/02/SSTi%20%E5%85%A8%E8%A7%A3%E6%9E%90/" title= "SSTi 学习(持续待更新)">
+                    <div class="prevTitle">SSTi 学习(持续待更新)</div>
                 </a>
             
         </li>
@@ -572,7 +564,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#如何从根本解决hexo不兼容标签问题"><span class="toc-number">1.</span> <span class="toc-text">如何从根本解决hexo不兼容标签问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#报错"><span class="toc-number">1.1.</span> <span class="toc-text">报错</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方案一"><span class="toc-number">1.2.</span> <span class="toc-text">方案一</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方案二"><span class="toc-number">1.3.</span> <span class="toc-text">方案二</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
