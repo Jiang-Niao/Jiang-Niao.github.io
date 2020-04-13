@@ -368,6 +368,39 @@ height:50vh;
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2020/04/03/CISCN2019%20%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BAbuu%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/" >
+            
+                <span>CISCN2019 华东南赛区 buu复现笔记</span>
+        </a>
+        <div class="abstract-content">
+            CISCN2019 华北赛区Day1 Web1-Dropbox在download.php下下载到源码，filename=../../download.php，需要返回两级是因为一般下载目录都不是根目录，具体往下几级就fuzz就好了，不会太多的。
+download.php
+12345678910111213141516171819202122232425&lt;?phpsession_start();if (!isset($_SESSION['login'])) &#123;    header("Location: login.php");    die();&#125;if (!iss...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/04/03</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "web">web</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "ctf">ctf</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2020/04/02/%E5%A6%82%E4%BD%95%E4%BB%8E%E6%A0%B9%E6%9C%AC%E8%A7%A3%E5%86%B3hexo%E4%B8%8D%E5%85%BC%E5%AE%B9%E6%A0%87%E7%AD%BE%E9%97%AE%E9%A2%98/" >
             
                 <span>如何从根本解决hexo不兼容标签问题</span>
@@ -579,6 +612,56 @@ height:50vh;
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2020/03/13/updatexml()%E3%80%81extractvalue()%20%E6%8A%A5%E9%94%99%E5%9E%8BSQL%E6%B3%A8%E5%85%A5/" >
+            
+                <span>sql报错注入：extractvalue、updatexml</span>
+        </a>
+        <div class="abstract-content">
+            sql报错注入：extractvalue、updatexmlextractvalue报错原理MySQL 5.1.5版本中添加了对XML文档进行查询和修改的两个函数：extractvalue、updatexml
+
+
+
+名称
+描述
+
+
+
+ExtractValue()
+使用XPath表示法从XML字符串中提取值
+
+
+UpdateXML()
+返回替换的XML片段
+
+
+通过这两个函数可以完成报错注入
+ExtractValue(xml_frag, xpath_expr)
+ExtractValue()接受两个字符串参数，一个XML标记片段 xml_frag和一个XPath表达式 xpath_expr（...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/03/13</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "WEB">WEB</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2020/01/20/docker%E5%BB%BA%E7%AB%8Bphp+mysql+apache%E7%9A%84web%E7%8E%AF%E5%A2%83/" >
             
                 <span>docker建立php+mysql+apache的web环境</span>
@@ -598,68 +681,6 @@ height:50vh;
         <a class="post-tag" href="javascript:void(0);" data-tags = "web">web</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "docker">docker</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/12/08/sqli-labs%E7%BB%83%E4%B9%A0/" >
-            
-                <span>sqli-labs练习</span>
-        </a>
-        <div class="abstract-content">
-            <p>sqli-labs的练习，持续更新</p>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/12/08</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "web">web</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "ctf">ctf</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/11/12/UNCTF%E5%AE%89%E6%81%92%E5%A4%8D%E7%8E%B0/" >
-            
-                <span>UNCTF的赛后复现</span>
-        </a>
-        <div class="abstract-content">
-            <p>学到了很多新的东西，学习学习</p>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/11/12</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "web">web</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "ctf">ctf</a>
     
 </div>
             
@@ -1083,9 +1104,35 @@ height:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 21
+        Total : 23
         </div>
         <!-- search  -->
         
@@ -1321,6 +1368,34 @@ height:50vh;
             <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/04/01/CISCN2019%20%E5%8D%8E%E4%B8%9C%E5%8D%97%E8%B5%9B%E5%8C%BA%20buu%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/" >CISCN2019 华东南赛区 buu复现笔记</a>
         </li>
     
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/04/03/CISCN2019%20%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BAbuu%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/" >CISCN2019 华东南赛区 buu复现笔记</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/03/13/updatexml()%E3%80%81extractvalue()%20%E6%8A%A5%E9%94%99%E5%9E%8BSQL%E6%B3%A8%E5%85%A5/" >sql报错注入：extractvalue、updatexml</a>
+        </li>
+    
     </div>
   </div>
         <div class="sidebar-panel-tags">
@@ -1335,6 +1410,10 @@ height:50vh;
         <span class="sidebar-tag-name" data-tags="docker"><span class="iconfont-archer">&#xe606;</span>docker</span>
     
         <span class="sidebar-tag-name" data-tags="入门"><span class="iconfont-archer">&#xe606;</span>入门</span>
+    
+        <span class="sidebar-tag-name" data-tags="WEB"><span class="iconfont-archer">&#xe606;</span>WEB</span>
+    
+        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -1378,6 +1457,8 @@ jsonContent:
         <span class="sidebar-category-name" data-categories="awd"><span class="iconfont-archer">&#xe60a;</span>awd</span>
     
         <span class="sidebar-category-name" data-categories="awd/web"><span class="iconfont-archer">&#xe60a;</span>awd/web</span>
+    
+        <span class="sidebar-category-name" data-categories="WEB"><span class="iconfont-archer">&#xe60a;</span>WEB</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
