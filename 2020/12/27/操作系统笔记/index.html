@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="JiangNiao">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="JiangNiao">
+    
+    <meta name="keywords" content="hexo,网络安全,hexo-blog">
+    
+    <meta name="description" content="一起努力">
+    <meta name="description" content="操作系统笔记导论and引论什么是操作系统 OS的基本模块进程管理、内存管理、文件系统、IO系统四大块 这四个部分就能使操作系统运转起来 OS的目标 作用  3、OS实现了对计算机资源的抽象 操作系统定义指控制和管理整个计算机系统的硬件和软件资源，并合理地组织调度计算机的工作和资源的分配，以提供给用户和其他软件方便的接口和环境。他是计算机系统中最基本的系统软件。 基本类型三种操作系统基本类型批处理系">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统笔记">
+<meta property="og:url" content="https://github.com/Jiang-Niao/Jiang-Niao.github.io/2020/12/27/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="江鸟&#39;s Bolg">
+<meta property="og:description" content="操作系统笔记导论and引论什么是操作系统 OS的基本模块进程管理、内存管理、文件系统、IO系统四大块 这四个部分就能使操作系统运转起来 OS的目标 作用  3、OS实现了对计算机资源的抽象 操作系统定义指控制和管理整个计算机系统的硬件和软件资源，并合理地组织调度计算机的工作和资源的分配，以提供给用户和其他软件方便的接口和环境。他是计算机系统中最基本的系统软件。 基本类型三种操作系统基本类型批处理系">
+<meta property="og:image" content="http://img.jiangniao.top/20201227171523.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227171841.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227171907.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227171914.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227172403.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227172504.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227172859.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227173024.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227192437.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227192528.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227193540.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227193610.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227193619.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227193624.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227193629.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227193643.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227193654.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227194130.png">
+<meta property="og:image" content="https://img-blog.csdn.net/20181017234443355?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L01hcnZpbl9IdW9zaGFu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20181018000118408?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L01hcnZpbl9IdW9zaGFu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20181018000149106?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L01hcnZpbl9IdW9zaGFu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img.jiangniao.top/20201227200445.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201026221239633.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzk0MTM2NA==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201014092543238.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNTg3NzQw,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201014092444801.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNTg3NzQw,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201014092521828.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNTg3NzQw,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201014095502416.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNTg3NzQw,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201014094336607.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNTg3NzQw,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201014094435343.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNTg3NzQw,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020101409452074.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNTg3NzQw,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201014094820421.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNTg3NzQw,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="http://img.jiangniao.top/20201227210446.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227210453.png">
+<meta property="og:image" content="http://img.jiangniao.top/20201227210623.png">
+<meta property="article:published_time" content="2020-12-27T09:14:17.525Z">
+<meta property="article:modified_time" content="2020-12-27T13:07:55.305Z">
+<meta property="article:author" content="JiangNiao">
+<meta property="article:tag" content="web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://img.jiangniao.top/20201227171523.png">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    
+    <title>操作系统笔记 · 江鸟&#39;s Blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/jn.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >江鸟&#39;s Blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">操作系统笔记</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>江鸟's Blog</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(http://img.jiangniao.top/20201115162121.png)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            操作系统笔记
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "web">web</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">12.7k</span>阅读时长: <span class="post-count reading-time">43 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/12/27</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="操作系统笔记"><a href="#操作系统笔记" class="headerlink" title="操作系统笔记"></a>操作系统笔记</h1><h2 id="导论and引论"><a href="#导论and引论" class="headerlink" title="导论and引论"></a>导论and引论</h2><h3 id="什么是操作系统"><a href="#什么是操作系统" class="headerlink" title="什么是操作系统"></a>什么是操作系统</h3><p><img src="http://img.jiangniao.top/20201227171523.png" alt=""></p>
+<h3 id="OS的基本模块"><a href="#OS的基本模块" class="headerlink" title="OS的基本模块"></a>OS的基本模块</h3><p>进程管理、内存管理、文件系统、IO系统四大块</p>
+<p>这四个部分就能使操作系统运转起来</p>
+<h3 id="OS的目标"><a href="#OS的目标" class="headerlink" title="OS的目标"></a>OS的目标</h3><p><img src="http://img.jiangniao.top/20201227171841.png" alt="image-20201227171841542"></p>
+<h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><p><img src="http://img.jiangniao.top/20201227171907.png" alt="image-20201227171907748"></p>
+<p><img src="http://img.jiangniao.top/20201227171914.png" alt="image-20201227171914067"></p>
+<p>3、OS实现了对计算机资源的抽象</p>
+<h3 id="操作系统定义"><a href="#操作系统定义" class="headerlink" title="操作系统定义"></a>操作系统定义</h3><p>指控制和管理整个计算机系统的硬件和软件资源，并合理地组织调度计算机的工作和资源的分配，以提供给用户和其他软件方便的接口和环境。他是计算机系统中最基本的系统软件。</p>
+<h3 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h3><p><strong>三种操作系统基本类型</strong>批处理系统、分时系统、实时系统</p>
+<p>分时系统：多个用户分时（按时间划分轮流）的使用同一计算机的系统称为为分时系统。</p>
+<p>分时系统中，为使多个用户能够同时与系统交互，最关键的问题是 <strong>能在一短的时间内，使所有用户程序都能运行；</strong></p>
+<p><strong>分时特点：</strong></p>
+<p>– 同时性或多路性：多用户同时操作、使用计算机</p>
+<p>– 独占性：各终端用户感觉到自己独占了计算机；</p>
+<p>– 及时性：用户的请求能在较短时间内相应；</p>
+<p>– 交互性：用户能与计算机进行人——机对话。</p>
+<p><strong>响应时间</strong>为用户发出一条指令到系统处理完这条指令并做出回答所需要的时间</p>
+<p>实时操作系统主要用于过程控制、事务处理等有实时要求的领域，其主要特征是 <strong>实时性</strong>和<strong>可靠性</strong></p>
+<p>在设计分时操作系统时，首先要考虑的是 <strong>交互性和响应时间</strong> ；在设计实时操作系统时，首先要考虑的是 <strong>实时性和可靠性</strong> ；在设计批处理系统时，首先要考虑的是 <strong>周转时间和**</strong>系统吞吐量**</p>
+<p>目前的操作系统，通常具有分时、实时和批处理功能，又称作<strong>通用操作系统</strong>。</p>
+<p><img src="http://img.jiangniao.top/20201227172403.png" alt="image-20201227172403724"></p>
+<h3 id="操作系统的基本特征"><a href="#操作系统的基本特征" class="headerlink" title="操作系统的基本特征"></a><strong>操作系统的基本特征</strong></h3><p>现代操作系统<strong>主要特征</strong>：</p>
+<p>1 ）<strong>并发性</strong></p>
+<p>单处理机、多道程序 处理时，宏观上并发，微观上 交替执行。并发指的是进程，操作系统是一个并发系统。</p>
+<p>2 ）<strong>共享性</strong></p>
+<p>多个进程共享有限的计算机系统资源，系统合理分配，资源在一个时间段内 交替被多个进程所用。</p>
+<p>3 ）<strong>虚拟性</strong></p>
+<p>一个 物理实体映射为若干个 对应的逻辑实体（分时或分空间）。虚拟是操作系统 管理 系统资源的 重要手段，可提高资源利用率。</p>
+<p>4 ）<strong>异步性</strong></p>
+<p>异步性也称不确定性，指进程的执行顺序和执行时间及执行 结果的不确定性：A程序执行结果不确定，不可再现  B多道程序设计环境下， 程序按异步方式运行。</p>
+<p><img src="http://img.jiangniao.top/20201227172504.png" alt="image-20201227172504075"></p>
+<h2 id="第二章进程描述与控制"><a href="#第二章进程描述与控制" class="headerlink" title="第二章进程描述与控制"></a>第二章进程描述与控制</h2><p><strong>前驱图和程序的执行</strong></p>
+<p><img src="http://img.jiangniao.top/20201227172859.png" alt="image-20201227172859115"></p>
+<h3 id="程序的顺序执行及其特征"><a href="#程序的顺序执行及其特征" class="headerlink" title="程序的顺序执行及其特征"></a><strong>程序的顺序执行及其特征</strong></h3><p><strong>顺序执行</strong>：仅当当前操作（程序段）执行完，才能执行后续操作。</p>
+<p><strong>在单道批处理系统中，对于多个用户程序来说，所有程序是依次执行的。(外部顺序性)</strong></p>
+<p><strong>对于一个程序来说，在若干个程序段之间，必须按照某种先后次序顺序执行；对同一个程序段中的多条指令，也是按某种顺序执行的。(内部顺序性)</strong></p>
+<h3 id="程序的并发执行及其特征"><a href="#程序的并发执行及其特征" class="headerlink" title="程序的并发执行及其特征"></a><strong>程序的并发执行及其特征</strong></h3><p><img src="http://img.jiangniao.top/20201227173024.png" alt="image-20201227173024384"></p>
+<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><h3 id="进程定义"><a href="#进程定义" class="headerlink" title="进程定义"></a>进程定义</h3><p>经典进程定义</p>
+<ol>
+<li>进程是程序一次定义</li>
+<li>进程是一个程序及其数据在处理机上顺序执行时发生的活动</li>
+<li>进程是程序在一个数据集合上运行的过程，它是系统进行资源分配和调度的一个独立单位</li>
+</ol>
+<p>传统os进程定义：</p>
+<p>进程是进程实体的运行过程，是系统进行资源分配和调度的一个独立单位</p>
+<h3 id="进程的特征："><a href="#进程的特征：" class="headerlink" title="进程的特征："></a><strong>进程的特征：</strong></h3><p>进程的特征：</p>
+<p>1.结构特征 <strong>程序段+相关数据+PCB=进程实体</strong> </p>
+<p>2.动态性 <strong>进程的实质是进程实体的一次执行过程。</strong></p>
+<p>3.并发性 <strong>多个进程实体同存于内存中，且能在一段时间内同时运行。</strong> </p>
+<p>4.独立性 <strong>进程实体是一个能独立运行、独立分配资源和独立接受调度的基本单位。</strong> </p>
+<p>5.异步性 <strong>是指进程按各自独立的、不可预知的速度向前推进</strong></p>
+<h3 id="进程和线程的区别"><a href="#进程和线程的区别" class="headerlink" title="进程和线程的区别"></a>进程和线程的区别</h3><p><strong>进程与程序的区别</strong></p>
+<p>进程是程序的一次执行，该程序可以与其它程序并发执行。</p>
+<p>) 进程是动态的，程序是静态的：程序是有序代码的集合；进程是程序的执行。通常进程不可在计算机之间迁移；而程序通常对应着文件、静态和可以复制。</p>
+<p>) 进程是暂时的，程序是永久的：进程是一个状态变化的过程，程序可长久保存</p>
+<p>) 进程与程序的对应关系：通过多次执行，一个程序可对应多个进程；通过调用关系，一个进程可包括多个程序。</p>
+<p>) 进程与程序的组成不同：进程的组成包括程序、数据和进程控制块（即进程状态信息）</p>
+<p><img src="http://img.jiangniao.top/20201227192437.png" alt="image-20201227192437355"></p>
+<h3 id="挂起操作"><a href="#挂起操作" class="headerlink" title="挂起操作"></a>挂起操作</h3><p><img src="http://img.jiangniao.top/20201227192528.png" alt="image-20201227192528567"></p>
+<h3 id="进程控制块-pcb"><a href="#进程控制块-pcb" class="headerlink" title="进程控制块 pcb"></a><strong>进程控制块 pcb</strong></h3><p><strong>PCB进程控制块：进程存在的唯一标识，操作系统管理控制进程运行所用的信息集合，描述进程的基本情况和运行变化的过程。</strong></p>
+<p><strong>用PCB的生成，回收，组织管理来完成进程的创建、终止和管理。</strong></p>
+<p><strong>PCB含有三大类信息：</strong><br><strong>（1） 进程标识，哪个程序在执行，执行了几次（本进程的标识），产生者标识（父进程标识），用户标识</strong><br><strong>（2） 处理机状态信息保存区，主要就是寄存器，保存进程的运行现场信息：</strong></p>
+<ul>
+<li><strong>用户可见寄存器，程序使用的数据，地址</strong></li>
+<li><strong>控制和状态寄存器，程序计数器pc，程序状态字PSW</strong></li>
+<li><strong>栈指针，过程调用/系统调用/中断处理和返回时需要用到</strong></li>
+</ul>
+<p><strong>（3） 进程控制信息</strong></p>
+<ul>
+<li><strong>调度和状态信息，用于操作系统调度进程并占用处理机使用。运行状态？等待？进程当前的执行现状</strong></li>
+<li><strong>进程间通信信息，各种标识、信号、信件等</strong></li>
+<li><strong>进程本身的存储管理信息，即指向本进程映像存储空间的数据结构，内存信息，占了多少？要不要回收？</strong></li>
+<li><strong>进程所用资源，打开使用的系统资源，如文件</strong></li>
+<li><strong>有关数据结构连接信息，父进程，子进程，构成一个链，进程可以连接到一个进程队列，或链接到其他进程的PCB</strong></li>
+</ul>
+<h3 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h3><p><img src="http://img.jiangniao.top/20201227193540.png" alt="image-20201227193540598"></p>
+<p>![image-20201227193545287](/Users/yuhongquan/Library/Application Support/typora-user-images/image-20201227193545287.png)</p>
+<p>![image-20201227193553257](/Users/yuhongquan/Library/Application Support/typora-user-images/image-20201227193553257.png)<img src="http://img.jiangniao.top/20201227193610.png" alt="image-20201227193610924"></p>
+<p><img src="http://img.jiangniao.top/20201227193619.png" alt="image-20201227193619242"></p>
+<p><img src="http://img.jiangniao.top/20201227193624.png" alt="image-20201227193624567"></p>
+<p><img src="http://img.jiangniao.top/20201227193629.png" alt="image-20201227193629768"></p>
+<p><img src="http://img.jiangniao.top/20201227193643.png" alt="image-20201227193643890"></p>
+<p><img src="http://img.jiangniao.top/20201227193654.png" alt="image-20201227193654023"></p>
+<h2 id="进程同步"><a href="#进程同步" class="headerlink" title="进程同步"></a><strong>进程同步</strong></h2><p>同步与互斥：</p>
+<p>   互斥：进程-资源-进程</p>
+<p>   同步：进程-进程</p>
+<p>   如何区分：只要是同类进程即为互斥关系，不同类进程即为同步关系。</p>
+<p>临界资源和临界区：</p>
+<p>   临界资源：属于系统资源</p>
+<p>   临界区：属于进程，是进程访问临界资源的代码块。</p>
+<p>同步应遵循的准则：</p>
+<ul>
+<li>空闲让进</li>
+<li>忙则等待</li>
+<li>有限等待</li>
+<li>让权等待（当一个进程不能进入自己的临界区时，则释放处理器给其他进程）</li>
+</ul>
+<p>经典同步问题：</p>
+<ol>
+<li>生产者-消费者问题：设置一个空缓冲区数目，一个满缓冲区数目，一个互斥信号量。</li>
+<li>读者-写者问题</li>
+<li>哲学家进餐问题：分成奇数号和偶数号，奇数号的哲学家先拿左边筷子，然后拿右边筷子；偶数号的哲学家则相反</li>
+<li>理发师问题：把店内的所有椅子看做一个变量，只要有空椅子就留下，没有就离开。</li>
+</ol>
+<h2 id="进程通信"><a href="#进程通信" class="headerlink" title="进程通信"></a>进程通信</h2><p>进程通信——进程之间的信息交换。<br>进程之间的互斥和同步，交换的信息量少——低级通信。<br>信号量机制作为通信工具不够理想，表现在：<br>    效率低；<br>    通信对用户不透明。<br>    进程高级通信——是指用户可直接利用OS所提供的一组通信命令，高效地传送大量数据的一种通信方式。<br>    高级通信过程对用户是透明;。<br>    大大减少了通信程序编制的复杂性。</p>
+<ol>
+<li>共享存储器系统 ：设置一个共享存储区</li>
+<li>消息传递系统：直接通信方式、间接通信方式（设置一个中间实体-信箱）</li>
+<li>管道通信系统：管道是用于连接读写进程以实现它们直接通信的共享文件，所以管道是共享文件。</li>
+</ol>
+<h2 id="进程和线程-比较"><a href="#进程和线程-比较" class="headerlink" title="进程和线程 比较"></a><strong>进程和线程 比较</strong></h2><p><img src="http://img.jiangniao.top/20201227194130.png" alt="image-20201227194130011"></p>
+<h2 id="线程（thread）管理"><a href="#线程（thread）管理" class="headerlink" title="线程（thread）管理"></a>线程（thread）管理</h2><p><strong>线程的定义</strong>：进程内一个<strong>执行单元</strong>或一个<strong>可调度实体</strong></p>
+<p>资源拥有单元称为进程（或任务），调度的单位称为线程。在具有多线程的操作系统中，处理机调度的基本单位是线程。一个进程可以有多个线程，而且至少有一个可执行线程。</p>
+<h2 id="处理机调度与死锁"><a href="#处理机调度与死锁" class="headerlink" title="处理机调度与死锁"></a><strong>处理机调度与死锁</strong></h2><h3 id="处理机调度的基本概念"><a href="#处理机调度的基本概念" class="headerlink" title="处理机调度的基本概念"></a><strong>处理机调度的基本概念</strong></h3><p>​    作业进入系统驻留在外存的后备队列上，再至调入内存运行完毕，可能要经历下述三级调度。</p>
+<ul>
+<li>高级调度（High Scheduling）</li>
+<li>中级调度（Intermediate-Level Scheduling）</li>
+<li>低级调度（Low Level Scheduling）</li>
+</ul>
+<h3 id="处理机调度的层次"><a href="#处理机调度的层次" class="headerlink" title="处理机调度的层次"></a>处理机调度的层次</h3><h3 id="高级调度"><a href="#高级调度" class="headerlink" title="高级调度"></a>高级调度</h3><ol>
+<li><p>主要任务</p>
+<p>高级调度又称为长程调度或者作业调度，它的调度对象是作业。主要功能是根据某种算法，决定将外存上处于后备队列中那几个作业调入内存，为它们创建进程，分配必要的资源，并将它们放入就绪队列。高级调度主要用于多道批处理系统，而在分时和实时系统中不设置高级调度。作用调度的频率很低，周期很长，大于几分钟一次。</p>
+</li>
+<li><p>两个决定</p>
+<p>在每次执行作业调度时，都须作出两个决定：</p>
+<ul>
+<li>接纳多少作业——取决于多道程序度。应根据系统的规模和运行速度等情况综合考虑。</li>
+<li>接纳哪些作业——取决于采用的调度算法。如先来先服务，短作业优先等</li>
+</ul>
+</li>
+</ol>
+<p><strong>系统运行并不一定存在高级调度</strong></p>
+<ul>
+<li>批处理系统：作业进入系统后先驻留外存，故需要有作业调度。</li>
+<li>分时系统：为及时响应，作业由终端直接送入内存，故不需作业调度。</li>
+<li>实时系统中，通常也不需作业调度。</li>
+</ul>
+<h3 id="低级调度"><a href="#低级调度" class="headerlink" title="低级调度"></a>低级调度</h3><p>也称为进程调度、微观调度或短程调度（Short-Term Scheduling）</p>
+<p>​     决定内存就绪队列中的哪个进程获得处理机，进行分配工作。是最基本的一种调度，在三种基本OS中都有。</p>
+<p><strong>进程调度方式</strong></p>
+<p>1）非抢占方式（Non-preemptive Mode）      </p>
+<p>一旦处理机分配给某进程，该进程一直执行。决不允许其他进程抢占已分配运行进程的处理机。</p>
+<p>2）抢占方式（Preemptive Mode）      </p>
+<p>允许调度程序根据某种原则，暂停某个正在执行的进程，将处理机重新分配给另一进程。</p>
+<h3 id="中级调度（Intermediate-Level-Scheduling）"><a href="#中级调度（Intermediate-Level-Scheduling）" class="headerlink" title="中级调度（Intermediate-Level Scheduling）"></a>中级调度（Intermediate-Level Scheduling）</h3><p>又称交换调度或中程调度（Medium-Term Scheduling）      </p>
+<p>引入目的：提高内存利用率和系统吞吐量。根据条件将一些进程调出或再调入内存</p>
+<h3 id="三种调度的频率和复杂度"><a href="#三种调度的频率和复杂度" class="headerlink" title="三种调度的频率和复杂度"></a>三种调度的频率和复杂度</h3><ul>
+<li>进程调度：运行频率最高，算法不能太复杂，以免占用太多的CPU时间。分时系统通常10~100ms便进行一次。</li>
+<li>作业调度：一个作业运行完毕退出系统时即触发重新调度一个新作业入内存，周期较长，大约几分钟一次。因而也允许作业调度算法花费较多的时间。</li>
+<li>中级调度：运行频率基本上介于上述两种调度之间。</li>
+</ul>
+<p><strong>三级调度比较</strong></p>
+<p><img src="https://img-blog.csdn.net/20181017234443355?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L01hcnZpbl9IdW9zaGFu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="img"></p>
+<p><strong>进程调度（低级调度）的运行频率最高</strong> </p>
+<p><strong>作业调度（高级调度）频率最低</strong> </p>
+<p><strong>中级调度（内存调度）界于之间</strong> </p>
+<h3 id="调度队列模型"><a href="#调度队列模型" class="headerlink" title="调度队列模型"></a>调度队列模型</h3><p>不论高级、中级或者低级调度，都涉及到进程队列，由此形成了三类调度队列模型。从这三种方式中体验调度的过程。</p>
+<ul>
+<li>仅有进程调度的调度队列模型</li>
+<li>具有高级和低级调度的调度队列模型</li>
+<li>同时具有三级调度的调度队列模型</li>
+</ul>
+<h3 id="选择调度方式和调度算法的若干准则"><a href="#选择调度方式和调度算法的若干准则" class="headerlink" title="选择调度方式和调度算法的若干准则"></a>选择调度方式和调度算法的若干准则</h3><ol>
+<li>面向用户的准则</li>
+</ol>
+<p><strong>周转时间短：</strong></p>
+<p>​     <strong>针对批处理系统的性能指标。作业从提交到完成所经历的时间。</strong></p>
+<p><strong>CPU执行用时Ts</strong></p>
+<p><strong>总的等待时间Tw = 在后备队列中等待 + 就绪队列上等待 + 阻塞队列中等待（等待I/O操作用时）</strong></p>
+<p><strong>周转时间T=Ts+Tw</strong></p>
+<p><strong>带权周转时间W= T/Ts</strong></p>
+<p><strong>平均周转时间<img src="https://img-blog.csdn.net/20181018000118408?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L01hcnZpbl9IdW9zaGFu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="img"></strong></p>
+<p><strong>平均带权周转时间<img src="https://img-blog.csdn.net/20181018000149106?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L01hcnZpbl9IdW9zaGFu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="img"></strong></p>
+<ul>
+<li><strong>响应时间快：针对分时系统。用户输入一个请求（如击键）到系统给出首次响应（如屏幕显示）的时间</strong></li>
+<li><strong>均衡性：系统响应时间的快慢与用户所请求的复杂性相适应。</strong></li>
+<li><strong>截止时间的保证：针对实时系统的性能指标。开始截止时间和完成截止时间。任务必须按规定的时间开始或完成，调度方式和算法必须能保证该要求。</strong></li>
+<li><strong>优先权准则：三大基本OS在调度算法的选择时都可遵循。可以使关键任务达到更好的指标。</strong></li>
+</ul>
+<ol start="2">
+<li><strong>面向系统的准则</strong></li>
+</ol>
+<ul>
+<li><strong>系统吞吐量高：批处理系统的重要指标。</strong></li>
+</ul>
+<p>​     <strong>单位时间内所完成的作业数，跟作业本身（与作业平均长度密切相关）和调度算法都有关系；</strong></p>
+<ul>
+<li><strong>处理机利用率好(主要针对大中型主机)</strong></li>
+<li><strong>各类资源的平衡利用(主要针对大中型主机)</strong></li>
+</ul>
+<h2 id="调度算法"><a href="#调度算法" class="headerlink" title="调度算法"></a>调度算法</h2><p><img src="http://img.jiangniao.top/20201227200445.png" alt="image-20201227200444941"></p>
+<p><code>FCFS</code> 算法 是一种先来先服务的的算法，根据先后顺序依次执行，它是一种非抢占式的调度算法，相对来说比较公平。</p>
+<p>同时适用于高级和低级调度</p>
+<p>优点：实现简单</p>
+<p>缺点：没考虑优先级</p>
+<p><strong>SJF 算法</strong></p>
+<p>即短作业优先算法，可用于进程调度，称为短进程优先算法，<code>SPF</code>，也是非抢占式算法，但是他们也有抢占式的版本：最短剩余时间算法 <code>SRTN</code>。</p>
+<p>同时适用于高级和低级调度</p>
+<p>优点：系统吞吐量</p>
+<p>缺点：不利于作业</p>
+<p><strong>高响应比优先调度算法</strong></p>
+<p>这是一个非抢占式的算法，只有当前运行的作业主动放弃处理机时才需要调度，才需要计算响应比。</p>
+<p><img src="https://img-blog.csdnimg.cn/20201026221239633.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzk0MTM2NA==,size_16,color_FFFFFF,t_70#pic_center" alt="img"></p>
+<p>一般来说，进程优先级的设置使用以下规则：</p>
+<ul>
+<li>系统进程 优先于 用户进程；</li>
+<li>交互型进程 优先于 非交互型进程；</li>
+<li><code>IO 型进程</code> 优先于 计算型进程；</li>
+</ul>
+<h3 id="高优先权优先调度算法"><a href="#高优先权优先调度算法" class="headerlink" title="高优先权优先调度算法"></a>高优先权优先调度算法</h3><p>1) 非抢占式优先权算法</p>
+<p>2) 抢占式优先权调度算法</p>
+<h3 id="轮转调度算法"><a href="#轮转调度算法" class="headerlink" title="轮转调度算法"></a>轮转调度算法</h3><p>![image-20201227201126618](/Users/yuhongquan/Library/Application Support/typora-user-images/image-20201227201126618.png)</p>
+<p>![image-20201227201138745](/Users/yuhongquan/Library/Application Support/typora-user-images/image-20201227201138745.png)</p>
+<h3 id="多级反馈队列调度算法"><a href="#多级反馈队列调度算法" class="headerlink" title="多级反馈队列调度算法"></a>多级反馈队列调度算法</h3><p>多个就绪队列</p>
+<p>每个队列都采用FCFS算法</p>
+<p>按照队列优先级调度</p>
+<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p>死锁：产生原因是几个进程因竞争系统资源或相互通信而处于永久阻塞状态。</p>
+<p>   根本原因：竞争资源      重要原因：进程推进顺序不当</p>
+<p>处理死锁的四种方法：</p>
+<ul>
+<li>鸵鸟算法：对死锁视而不见</li>
+<li>预防死锁：设置限制条件，破坏产生死锁的4个必要条件之一或几个</li>
+<li>避免死锁：资源动态分配过程中，用某种方法防止系统进入不安全状态，比如不给某个进程分配资源。</li>
+<li>检测和解除死锁：采取措施解除死锁，比如剥夺某个进程的资源。</li>
+</ul>
+<p>饿死：因为等待时间过长而饿死，比如在优先级分配算法中，不断的有高优先级的进程产生，则低优先级的进程总是分配不到处理器，则会饿死。 饿死是有机会分配到处理器，只是时间比较长，而死锁是相互缺乏资源不能分配处理器。</p>
+<h2 id="存储器管理"><a href="#存储器管理" class="headerlink" title="存储器管理"></a>存储器管理</h2><h3 id="存储器的层次结构"><a href="#存储器的层次结构" class="headerlink" title="存储器的层次结构"></a>存储器的层次结构</h3><p><strong>多层结构的存储器系统</strong></p>
+<ol>
+<li>存储器的多层结构。<br>存储层次至少应具有三级：最高层为 CPU 寄存器，中间为主存，最底层是辅存。还可以根据具体的功能分工细划为寄存器、高速缓存、主存储器、磁盘缓存、固定磁盘、可移动存储介质等 6 层。在存储层次中越往上，存储介质的访问速度越快，价格也越高，相对存储容量也越小。<br>寄存器、高速缓存、主存储器和磁盘缓存均属于操作系统存储管理的管辖范畴，掉电后它们存储的信息不再存在。固定磁盘和可移动存储介质属于设备管理的管辖范畴，它们存储的信息将被长期保存。</li>
+<li>可执行存储器。<br>寄存器和主存储器又被称为可执行存储器。</li>
+</ol>
+<p><strong>主存储器与寄存器</strong></p>
+<ol>
+<li>主存储器。<br>主存储器简称内存或主存。由于主存储器的访问速度远低于 CPU 执行指令的速度，为缓和这一矛盾，在计算机系统中引入了寄存器和高速缓存。</li>
+<li>寄存器。<br>寄存器具有与处理机相同的速度。主要用于存放处理机运行时的数据。如用寄存器存放操作数，或用作地址寄存器加快地址转换速度等。</li>
+</ol>
+<p><strong>高速缓存和磁盘缓存</strong></p>
+<ol>
+<li>高速缓存。<br>高速缓存是介于寄存器和存储器之间的存储器，主要用于备份主存中较常用的数据。其容量远大于寄存器，而比内存约小两到三个数量级左右。<br>根据程序执行的局部性原理(即程序在执行时将呈现出局部性规律，在一较短的时间内，程序的执行仅局限于某个部分)，将主存中一些经常访问的信息存放在高速缓存中。当 CPU 访问一组特定信息时，首先检查它是否在高速缓存中，在则直接取出使用，否则再从主存中读取。</li>
+<li>磁盘缓存。<br>由于目前磁盘的 I/O 速度远低于对主存的访问速度，因此将频繁使用的一部分磁盘数据和信息，暂时存放在磁盘缓存中，可减少访问磁盘的次数。但磁盘缓存与高速缓存不同，它本身并不是一种实际存在的存储介质，而是利用主存中的部分存储空间暂存从磁盘中读出(或写入)的信息。</li>
+</ol>
+<h3 id="程序的装入和链接"><a href="#程序的装入和链接" class="headerlink" title="程序的装入和链接"></a>程序的装入和链接</h3><p>用户程序要在系统中运行，必须先将它装入内存，然后再将其转变为一个可以执行的程序，通常都要经过以下几个步骤：<br>1）编译，由编译程序将用户源代码编译成若干个目标模块。<br>2）链接，由链接程序将编译后形成的一组目标模块，以及它们所需要的库函数链接在一起，形成一个完整的装入模块。<br>3）装入，由装入程序将装入模块装入内存。</p>
+<p><strong>程序的装入</strong></p>
+<ol>
+<li>绝对装入方式。<br>仅能运行单道程序时可以采用该种方式。装入模块被装入内存后，程序中的逻辑地址与实际内存地址完全相同。</li>
+<li>可重定位装入方式。<br>采用可重定位装入方式，根据内存的当前情况，将装入模块装入到内存的适当位置。值得注意的是，在采用可重定位装入程序将装入模块装入内存后，会使装入模块中的所有逻辑地址与实际装入内存的物理地址不同。通常是把在装入时对目标程序中指令和数据地址的修改过程称为重定位。又因为地址变换通常是在装入时一次完成的，以后不再改变，故称为静态重定位。</li>
+<li>动态运行时装入方式。<br>动态运行时的装入程序在把装入模块装入内存后，并不立即把装入模块中的相对地址转换为绝对地址，而是把这种地址转换推迟到程序真正要执行时才进行。因此，装入内存后的所有地址都仍是相对地址。为使地址转换不影响指令的执行速度，这种方式需要一个重定位寄存器的支持。</li>
+</ol>
+<h2 id="内存分区和分页"><a href="#内存分区和分页" class="headerlink" title="内存分区和分页"></a>内存分区和分页</h2><h3 id="连续分配存储管理方式"><a href="#连续分配存储管理方式" class="headerlink" title="连续分配存储管理方式"></a>连续分配存储管理方式</h3><p>为了能将用户程序装入内存，必须为它分配一定大小的内存空间。</p>
+<p><strong>单一连续分配</strong></p>
+<p>只能用于单道程序环境下，整个内存的用户空间由一个程序独占。</p>
+<p><strong>固定分区分配</strong></p>
+<p>将内存用户空间划分为若干个固定大小的区域，在每个分区中只装入一道作业。</p>
+<ol>
+<li>划分分区的方法。<br>分区大小相等、分区大小不等。</li>
+<li>内存分配。<br>通常将分区按大小进行排队，并为之建立一张分区使用表，其中各表项包括每个分区的起始地址、大小及状态(是否已分配)。当有一用户程序要装入时，由内存分配程序检索该表，从中找出一个能满足要求的、尚未分配的分区，将之分配给该程序，然后将该表项中的状态置为“已分配”。</li>
+</ol>
+<p><strong>动态分区分配</strong></p>
+<p>又称可变分区分配。</p>
+<ol>
+<li>动态分区分配中的数据结构。<br>常用的数据结构有以下两种形式：<br>空闲分区表，表目：分区号、分区大小、分区始址、状态。<br>空闲分区链，在每个分区的起始部分设置一些用于控制分区分配的信息，以及用于链接各分区所用的前向指针；在分区尾部则设置一后向指针，以及前后都重复设置状态位和分区大小表目。通过前、后向链接指针，可将所有的空闲分区链接成一个双向链。</li>
+<li>动态分区分配算法。<br>顺序式搜索算法、索引式搜索算法。</li>
+<li>分区分配操作。<br>1）分配内存：<br>系统应利用某种分配算法，从空闲分区链(表)中找到所需大小的分区。设请求的分区大小为 u.size，表中每个空闲分区的大小可表示为 m.size。若 m.size-u.size≤size(size 是事先规定的不再切割的剩余分区的大小)，说明多余部分太小，可不再切割，将整个分区分配给请求者；否则(即多余部分超过 size)，从该分区中按请求的大小划分出一块内存空间分配出去，余下的部分仍留在空闲分区链(表)中。然后，将分配区的首址返回给调用者。<br>2）回收内存：<br>当进程运行完毕释放内存时，系统根据回收区的首址，从空闲区链(表)中找到相应的插入点，此时可能出现以下四种情况之一：<br>①回收区与插入点的前一个空闲分区相邻接，此时应将回收区与插入点的前一分区合并。<br>②回收分区与插入点的后一空闲分区相邻接，此时也可将两分区合并。<br>③回收区同时与插入点的前、后两个分区邻接，此时将三个分区合并。<br>④回收区既不与前一个邻接，又不与后一个邻接，这时应为回收区单独建立一新表项，填写回收区的首址和大小，并根据其首址插入到空闲链中的适当位置。</li>
+</ol>
+<p><strong>基于顺序搜索的动态分区分配算法</strong></p>
+<p>顺序搜索，是指依次搜索空闲分区链上的空闲分区，去寻找一个其大小能满足要求的分区。<br>碎片：内存空间不断被划分，会留下许多难以利用的、很小的空闲分区。</p>
+<ol>
+<li>首次适应算法。<br>要求空闲分区链以地址递增的次序链接。在分配内存时，从链首开始顺序查找，直至找到一个大小能满足要求的空闲分区为止，缺点是低址部分会不断被划分，形成碎片。</li>
+<li>循环首次适应算法。<br>在为进程分配内存空间时，不再是每次都从链首开始查找，而是从上次找到的空闲分区的下一个空闲分区开始查找。实现可通过设置一起始查寻指针，用于指示下一次起始查寻的空闲分区，并采用循环查找方式。缺点缺乏大的空闲分区。</li>
+<li>最佳适应算法。<br>总是把能满足要求、又是最小的空闲分区分配给作业，为了加速寻找，该算法要求将所有的空闲分区按其容量以从小到大的顺序形成一空闲分区链。缺点产生许多碎片。</li>
+<li>最坏适应算法。<br>在扫描整个空闲分区表或链表时，总是挑选一个最大的空闲区，分割一部分空间给作业使用。要求将所有的空闲分区按其容量以从大到小的顺序形成一空闲分区链，查找时只要看第一个分区能否满足作业要求即可。缺点缺乏大的空闲分区。</li>
+</ol>
+<p><strong>基于索引搜索的动态分区分配算法</strong></p>
+<ol>
+<li>快速适应算法。<br>又称为分类搜索法。是将空闲分区根据其容量大小进行分类，对于每一类具有相同容量的所有空闲分区，单独设立一个空闲分区链表，同时在内存中设立一张管理索引表，该表的每一个表项对应了一种空闲分区类型，并记录了该类型空闲分区链表表头的指针。<br>该算法仅需要根据进程的长度，寻找到能容纳它的最小空闲区链表，并取下第一块进行分配即可。在分配过程中，不会对任何分区产生分割。</li>
+<li>伙伴系统。<br>规定，无论已分配分区或空闲分区，其大小均为 2 的 k 次幂（k 为整数，l≤k≤m）。通常 2^m是整个可分配内存的大小。<br>对于每一类具有相同大小的所有空闲分区，单独设立一个空闲分区双向链表。<br>当需要为进程分配一个长度为 n 的存储空间时，首先计算一个 i 值，使 2^(i-1) &lt; n ≤ 2^i，然后在空闲分区大小为 2^i 的空闲分区链表中查找。若找到则直接分配。否则，则在分区大小为 2^(i+1) 的空闲分区链表中寻找。若存在 2^(i+1) 的一个空闲分区，则把该空闲分区分为相等的两个分区，这两个分区称为一对伙伴，其中的一个分区用于分配，而把另一个加入分区大小为 2^i 的空闲分区链表中。若仍然找不到，依次类推去寻找更高1次幂的分区。<br>与一次分配可能要进行多次分割一样，一次回收也可能要进行多次合并，如回收大小为 2^i的空闲分区时，若事先已存在回收块所对应的2^i伙伴块的空闲分区时，则应将其与伙伴分区合并为大小为2^(i+1)的空闲分区，若事先已存在新合并空闲块对应的2^(i+1)伙伴块的空闲分区时，依次类推合并。<br>对于一个大小为2^k，地址为x的内存块，其伙伴块的地址则用buddy <em>k</em> (x)表示，其通式为：<code>if(x MOD 2^(k+1) == 0) {buddy k (x) = x + 2^k;}else if(x MOD 2^(k+1) == 2^k) {buddy k (x) = x - 2^k;}</code></li>
+<li>哈希算法。<br>构造一张以空闲分区大小为关键字的哈希表，该表的每一个表项记录了一个对应的空闲分区链表表头指针。</li>
+</ol>
+<p><strong>动态可重定位分区分配</strong></p>
+<ol>
+<li>紧凑。<br>在连续分配方式中，必须把一个系统或用户程序装入一连续的内存空间。当一台计算机运行了一段时间后，它的内存空间将会被分割成许多小的分区，而缺乏大的空闲分区。<br>通过移动内存中作业的位置，以把原来多个分散的小分区拼接成一个大分区的方法，称为“拼接”或“紧凑”。由于经过紧凑后的某些用户程序在内存中的位置发生了变化。为此，在每次“紧凑”后，都必须对移动了的程序或数据进行重定位。</li>
+<li>动态重定位。<br>在动态运行时装入的方式中，作业装入内存后的所有地址都仍然是相对(逻辑)地址，将相对地址转换为物理地址的工作，被推迟到程序指令要真正执行时进行。<br>地址变换过程是在程序执行期间，随着对每条指令或数据的访问借助重定位寄存器自动进行的，故称为动态重定位。当系统对内存进行了“紧凑”而使若干程序从内存的某处移至另一处时，不需对程序做任何修改，只要用该程序在内存的新起始地址，去置换原来的起始地址即可。</li>
+<li>动态重定位分区分配算法。<br>动态重定位分区分配算法与动态分区分配算法基本上相同，差别仅在于：在这种分配算法中，增加了紧凑的功能。</li>
+</ol>
+<h3 id="分页存储管理方式"><a href="#分页存储管理方式" class="headerlink" title="分页存储管理方式"></a>分页存储管理方式</h3><p>基于允许将一个进程直接分散地装入到许多不相邻接的分区中，则无须再进行“紧凑” 的思想而产生了离散分配方式。分为以下三种：<br>1）分页存储管理方式：将用户程序的地址空间分为若干个固定大小的区域，称为“页”或者“页面”。也将内存空间分为若干个物理块或页框，页和框的大小相同。<br>2）分段存储管理方式：把用户程序的地址空间分为若干个大小不同的段。分配以段为单位。<br>3）段页式存储管理方式：是分页和分段两种存储方式相结合的产物。</p>
+<h3 id="两级和多级页表"><a href="#两级和多级页表" class="headerlink" title="两级和多级页表"></a>两级和多级页表</h3><p>如果进程有1M个页表项，则该进程页表（含1M个页表项，每个页表项占1个字节）就要占用1MB的连续内存空间。解决办法：①+②</p>
+<p>①采用离散分配方式——&gt;增加外层页表及外层页表寄存器，实现两级和多级页表；</p>
+<p>②将当前需要的部分页表项调入内存，其余的页表项仍驻留在磁盘上，需要时再调入；</p>
+<h3 id="段页式存储管理方式"><a href="#段页式存储管理方式" class="headerlink" title="段页式存储管理方式"></a>段页式存储管理方式</h3><h3 id="引入原因："><a href="#引入原因：" class="headerlink" title="引入原因："></a>引入原因：</h3><p>分页和分段管理方式各有其优缺点，分页系统能有效提高内存的利<br>用率，而分段则能更好地满足用户的需要，因此可以将两者结合成一种新<br>的存储管理方式系统称为“段页式系统”。</p>
+<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><p>结合分段和分贝思想，先将用户程序分成若干段并分别赋予段名，再将这些段分为若干页<br>地址结构:由段号、段内页号和页内地址三项共同构成地址</p>
+<table>
+<thead>
+<tr>
+<th>段号(S)</th>
+<th>段内页号（P)</th>
+<th>页内地址(W)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="虚拟存储器"><a href="#虚拟存储器" class="headerlink" title="虚拟存储器"></a>虚拟存储器</h2><p>所谓“虚拟存储器”，是指具有请求调入功能和置换功能，能从逻辑上对内存容量加以扩充的一种存储器系统。</p>
+<p><strong>虚拟的实现</strong>建立在离散分配存储管理基础上<br>方式：请求分页/请求分段系统<br>细节：分页/段机构、中断机构、地址变换机构、软件支持</p>
+<p><strong>虚拟存储器的特征:</strong><br><strong>1.多次性：一个作业被分成多次调入内存运行</strong><br><strong>2.对换性：允许在作业的运行过程中进行换进、换出。（进程整体对换不算虚拟）</strong><br><strong>3.最终体现虚拟性：能够从逻辑上扩充内存容量，使用户所看到的内存容量远大于实际内存容量。</strong></p>
+<h3 id="请求分页存储管理方式"><a href="#请求分页存储管理方式" class="headerlink" title="请求分页存储管理方式"></a><strong>请求分页存储管理方式</strong></h3><p>由基本分页 + “请求调页”和“页面置换”功能组成。换入和换出基本单位都是长度固定的页面.</p>
+<ol>
+<li>页表基本功能不变：逻辑地址映射为物理地址,增加虚拟功能后需记录的页表项信息有变化：<br>页号+物理块号/外存地址(存储何种地址取决于P)+状态位P+访问字段A+修改位M<br>状态位P ：指示该页是否已调入内存。<br>访问字段A ：用于记录本页在一段时间内被访问的次数，或记录本页最近已有多长时间未被访问。(置换时考量的参数)<br>修改位M ：该页在调入内存后是否被修改过。(关系到置换时调出的具体操作)<br>外存地址：用于指出该页在外存上的地址。</li>
+<li>缺页中断机构:<br>每当要访问的页面不在内存时，便产生一缺页中断通知OS，OS则将所缺之页调入内存。作为中断，需经历几个步骤：<br>–“保护CPU环境”<br>–“分析中断原因”<br>–“转入缺页中断处理程序”<br>–“恢复CPU环境”等。<br>作为一种特殊中断，与一般中断有明显区别：<br>(1) 在指令执行期间产生和处理中断信号。<br>(2) 一条指令在执行期间，可能产生多次缺页中断。</li>
+<li>地址变换机构:<br>分页系统地址变换机构的基础上增加分页系统地址变换机构的基础上增加<br>产生和处理缺页中断（请求调入）<br>从内存中换出一页的功能（置换）</li>
+</ol>
+<h3 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a><strong>内存分配</strong></h3><p><strong>最小物理块数的确定</strong><br>    取决于指令的格式、功能和寻址方式<br><strong>内存分配策略 （固定和可变，全局和局部）</strong><br>    固定分配局部置换<br>    可变分配全局置换<br>        最易于实现的物理块分配和置换策略，已用于若干OS中<br>    可变分配局部置换<br><strong>物理块分配算法</strong><br>    平均分配算法——显然不太合理<br>    按比例分配算法<br>    考虑优先权的分配算法<br>        一部分按比例；另一部分根据各进程的优先权——合理   </p>
+<h3 id="页面调入策略"><a href="#页面调入策略" class="headerlink" title="页面调入策略"></a>页面调入策略</h3><ul>
+<li>请求调页策略：一个页面只有在被用到时才被调入到内存中，否则就放在外存中。这种调页方式容易产生较多的缺页中断，时间开销大，容易产生抖动现象。</li>
+<li>预调页策略：是指将预计不久之后会被用到的页面一并调入到内存，尽管暂时它们还没被用到。这是一种基于局部性原理的预测，通常用于程序的首次调入。</li>
+</ul>
+<p><strong>从何处调入页面</strong></p>
+<ul>
+<li>系统拥有足够的对换区空间：这时可以全部从对换区调入所需页面，以提高调页速度。</li>
+<li>系统缺少足够的对换区空间：这时凡是不会被修改的文件，都直接从文件区调入；而当置换出这些页面时，由于它们未被修改而不必再将它们换出，以后再调入时，仍从文件区直接调入。但对于那些可能被修改的部分，在将它们换出时，便需调到对换区，以后需要时再从对换区调入。</li>
+<li>方式：由于与进程有关的文件都放在文件区，因此凡是未运行过的页面都应从文件区调入。而对于曾经运行过但又被换出的页面，由于是被放在对换区，因此在下次调入时，应从对换区调入。</li>
+</ul>
+<h2 id="页面置换算法详解"><a href="#页面置换算法详解" class="headerlink" title="页面置换算法详解"></a><strong>页面置换算法详解</strong></h2><p>页面置换算法的功能：当出现缺页异常，需调入新页面而内存已满时，置换算法选择被置换的物理页面。</p>
+<p>页面置换算法的设计目标：尽可能减少页面的调入调出次数，把未来不再访问或短期内不访问的页面调出。</p>
+<p><strong>先进先出算法（First-In First-Out, FIFO）</strong></p>
+<p>  思路：选择在内存驻留时间最长的页面进行置换</p>
+<p>  实现：维护一个记录所有位于内存中的逻辑页面链表，链表元素按驻留内存的时间排序，链首最长，链尾最短，出现缺页时，选择链首页面进行置换，新页面加到链尾</p>
+<p>  特点：实现简单；性能较差，调出的页面可能是经常访问的</p>
+<p>  <strong>最近最久未使用算法 (Least Recently Used, LRU)</strong></p>
+<p>  思路：选择最长时间没有被引用的页面进行置换，因为如果某些页面长时间未被访问，则它们在将来还可能会长时间不会访问</p>
+<p>  实现：缺页时，计算内存中每个逻辑页面的上一次访问时间，选择上一次使用到当前时间最长的页面</p>
+<p>  特点：可能达到最优的效果，维护这样的访问链表开销比较大</p>
+<p> <strong><em>\</em>最不常用算法（Least Frequently Used, LFU）**</strong></p>
+<p>  思路：缺页时，置换访问次数最少的页面</p>
+<p>  实现：每个页面设置一个访问计数，访问页面时，访问计数加1，缺页时，置换计数最小的页面</p>
+<p>  特点：算法开销大，开始时频繁使用，但以后不使用的页面很难置换</p>
+<p><strong>时钟置换算法（Clock）</strong></p>
+<p>  思路：仅对页面的访问情况进行大致统计</p>
+<p>  实现：在页表项中增加访问位，描述页面在过去一段时间的内访问情况，将各页面组织成环形链表，指针指向最先调入的页面，访问页面时，在页表项记录页面访问情况，缺页时，从指针处开始顺序查找未被访问的页面进行置换</p>
+<p>  特点：时钟算法是LRU和FIFO的折中</p>
+<p><strong>影响缺页率的因素 缺页率=缺页次数/页面访问总页数</strong></p>
+<p>1、进程所分配的物理块数目    2、页面尺寸</p>
+<p>3、页面替换算法             4、程序固有特性  </p>
+<h2 id="输入输出系统"><a href="#输入输出系统" class="headerlink" title="输入输出系统"></a><strong>输入输出系统</strong></h2><p>除了提供抽象(例如，进程（和线程）、地址空间和文件）以外，操作系统还要控制计算机的所有I/O（输入/输出）设备。</p>
+<h4 id="设备分类（按照信息交换基本单位分类）"><a href="#设备分类（按照信息交换基本单位分类）" class="headerlink" title="设备分类（按照信息交换基本单位分类）"></a>设备分类（按照信息交换基本单位分类）</h4><h5 id="块设备："><a href="#块设备：" class="headerlink" title="块设备："></a>块设备：</h5><p>块设备把信息存储在固定大小的块中，每个块有自己的地址。通常块的大小在512字节至32 768字节之间。所有传输以一个或多个完整的（连续的）块为单位。块设备的基本特征是每个块都能独立于其他块而读写（<strong>可寻址</strong>）。硬盘、CD-ROM和USB盘是最常见的块设备。</p>
+<h5 id="字符设备："><a href="#字符设备：" class="headerlink" title="字符设备："></a>字符设备：</h5><p>字符设备以字符为单位发送或接收一个字符流，而不考虑任何块结构。字符设备是<strong>不可寻址</strong>的，也没有任何寻道操作。打印机、网络接口、鼠标（用作指点设备）、老鼠（用作心理学实验室实验），以及大多数与磁盘不同的设备都可看作是字符设备。在输入/输出的时候一般采用中断驱动的方式。</p>
+<h3 id="设备控制器"><a href="#设备控制器" class="headerlink" title="设备控制器"></a>设备控制器</h3><p>I/O设备一般由<strong>机械部件</strong>和<strong>电子部件</strong>两部分组成。通常可以将这两部分分开处理，以提供更加模块化和更加通用的设计。电子部件称作<strong>设备控制器</strong>（device controller）或适配器（adapter）。设备控制器用于控制机械部件工作。</p>
+<h5 id="设备控制器的功能"><a href="#设备控制器的功能" class="headerlink" title="设备控制器的功能"></a>设备控制器的功能</h5><ul>
+<li>接受和识别CPU发出的命令（<strong>控制寄存器</strong>中存放CPU命令的参数）</li>
+<li>向CPU报告设备的状态（设置<strong>状态寄存器</strong>）</li>
+<li>数据交换（<strong>数据寄存器</strong>）</li>
+<li>地址识别（有两种编址方式：<strong>内存映射I/O</strong>、<strong>单独分配</strong>）</li>
+</ul>
+<p>控制器与设备之间的接口通常是一个很低层次的接口。例如，磁盘可以按每个磁道10 000个扇区，每个扇区512字节进行格式化。</p>
+<p>控制器的任务是把串行的位流转换为字节块，并进行必要的错误校正工作。字节块通常首先在控制器内部的一个缓冲区中按位进行组装，然后在对校验和进行校验并证明字节块没有错误后，再将它复制到主存中。</p>
+<h2 id="磁盘存储器的性能和调度"><a href="#磁盘存储器的性能和调度" class="headerlink" title="磁盘存储器的性能和调度"></a>磁盘存储器的性能和调度</h2><p><img src="https://img-blog.csdnimg.cn/20201014092543238.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNTg3NzQw,size_16,color_FFFFFF,t_70#pic_center" alt="img"></p>
+<h3 id="如何在磁盘中读-写数据？"><a href="#如何在磁盘中读-写数据？" class="headerlink" title="如何在磁盘中读/写数据？"></a>如何在磁盘中读/写数据？</h3><p><img src="https://img-blog.csdnimg.cn/20201014092444801.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNTg3NzQw,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="磁盘的物理地址"><a href="#磁盘的物理地址" class="headerlink" title="磁盘的物理地址"></a>磁盘的物理地址</h3><p><img src="https://img-blog.csdnimg.cn/20201014092521828.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNTg3NzQw,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="一次磁盘读-写操作需要的时间"><a href="#一次磁盘读-写操作需要的时间" class="headerlink" title="一次磁盘读/写操作需要的时间"></a>一次磁盘读/写操作需要的时间</h3><p><img src="https://img-blog.csdnimg.cn/20201014095502416.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNTg3NzQw,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h2 id="磁盘调度算法"><a href="#磁盘调度算法" class="headerlink" title="磁盘调度算法"></a>磁盘调度算法</h2><h3 id="1、先来先服务FCFS"><a href="#1、先来先服务FCFS" class="headerlink" title="1、先来先服务FCFS"></a>1、先来先服务FCFS</h3><p><img src="https://img-blog.csdnimg.cn/20201014094336607.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNTg3NzQw,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="2、最短寻找时间优先SSTF"><a href="#2、最短寻找时间优先SSTF" class="headerlink" title="2、最短寻找时间优先SSTF"></a>2、最短寻找时间优先SSTF</h3><p><img src="https://img-blog.csdnimg.cn/20201014094435343.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNTg3NzQw,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="3、扫描算法SCAN"><a href="#3、扫描算法SCAN" class="headerlink" title="3、扫描算法SCAN"></a>3、扫描算法SCAN</h3><p><img src="https://img-blog.csdnimg.cn/2020101409452074.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNTg3NzQw,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="4、循环扫描算法C-SCAN"><a href="#4、循环扫描算法C-SCAN" class="headerlink" title="4、循环扫描算法C-SCAN"></a>4、循环扫描算法C-SCAN</h3><p><img src="https://img-blog.csdnimg.cn/20201014094820421.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNTg3NzQw,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h2 id="文件管理"><a href="#文件管理" class="headerlink" title="文件管理"></a>文件管理</h2><h4 id="文件管理，由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文件进行管理是操作系统实现的目标。"><a href="#文件管理，由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文件进行管理是操作系统实现的目标。" class="headerlink" title="文件管理，由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文件进行管理是操作系统实现的目标。"></a>文件管理，由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文件进行管理是操作系统实现的目标。</h4><p>现代OS几乎都是通过文件系统来组织和管理在计算机中所存储的大量程序和数据的。<strong>文件系统的管理功能是通过把它所管理的程序和数据组织成一系列文件的方法来实现的。而文件则是指具有文件名的若干相关元素的集合。元素通常是记录，而记录是一组有意义的数据项的集合</strong>。可以把数据组成分为数据项、记录、文件。<br>　　<br>　　①<strong>数据项</strong>，数据项是最低级数据组织形式。分为基本数据项（用于描述一个对象某种属性的字符集，是数据组织中可以明明的最小逻辑数据单位，即原子数据，又称为数据元素或字段）和组合数据项（由若干个基本数据项组成）</p>
+<p>　　② <strong>记录</strong>，是一组相关数据项的集合，用于描述一个对象在某方面的属性，为了<strong>能够唯一标识一个记录，需要在一个记录的各个数据项中确定一个或几个数据项，把他们的集合称为关键字，关键字是能够唯一标识一个记录的数据项。</strong></p>
+<p>　　③ <strong>文件</strong>，文件是具有文件名的一组相关元素的集合，分为<strong>有结构文件（又称记录式文件：文件由一组相似记录组成 。如报考某学校的所有考生的报考信息记录</strong>）和无结构文件（<strong>又称流式文件：被看成是一个字符流。比如一个二进制文件或字符文件</strong>）。有结构文件由若干个相关记录组成，无结构文件则被看成一个字符流。<strong>文件是文件系统的最大数据单位</strong>。文件应该具有自己的属性，包括文件类型（如源文件、目标文件、可执行文件等），文件长度（文件的当前长度，也可能是最大允许长度），文件的物理位置（指示文件在哪一个设备上及在该设备的哪个位置的指针），文件的建立时间（文件最后一次修改时间）。</p>
+<h3 id="文件的属性"><a href="#文件的属性" class="headerlink" title="文件的属性"></a>文件的属性</h3><p>①名称：文件名称唯一，以容易读取的形式保存。</p>
+<p>②标识符：标识文件系统内文件的唯一标签,通常为数字，它是对人不可读的一种内部名称。</p>
+<p>③类型：被支持不同类型的文件系统所使用。</p>
+<p>④位置：指向设备和设备上文件的指针。</p>
+<p>⑤大小：文件当前大小（用字节、字或块表示），也可包含文件允许的最大值。</p>
+<p>⑥保护：对文件进行保护的访问控制信息。</p>
+<p>⑦时间、日期和用户标识：文件创建、上次修改和上次访问的相关信息，用于保护、 安全和跟踪文件的使用</p>
+<h3 id="文件类型"><a href="#文件类型" class="headerlink" title="文件类型"></a>文件类型</h3><p>①按用途分类：系统文件、用户文件、库文件。</p>
+<p>②按文件中数据的形式分类：源文件、目标文件、可执行文件。</p>
+<p>③按存取控制属性分类：只执行文件、只读文件、读写文件。</p>
+<p>④按组织形式和处理方式分类：普通文件、目录文件、特殊文件。</p>
+<h3 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a><strong>文件操作</strong></h3><p>（1）基本文件操作：创建文件、删除文件、读文件、写文件、设置文件的读/写位置（可以改顺序存取为随机存取）</p>
+<p>（2）文件的“打开”“关闭”操作：</p>
+<p>①打开：系统将指名文件的属性从外存拷贝到内存打开文件表的一个表目中，并将该表目的编号（索引号）返回给用户。即在用户和指定文件之间建立一个连接。</p>
+<p>②关闭：断开用户与指定文件之间的连接。</p>
+<p>（3）其他文件操作：允许用户直接设置和获得文件的属性、进行有关目录的操作等。</p>
+<h3 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a><strong>文件结构</strong></h3><p>分为：逻辑结构、物理结构。</p>
+<p>（1）文件的<strong>逻辑结构</strong>：即文件组织，从用户观点出发所观察到的文件组织形式。</p>
+<p>（2）文件的<strong>物理结构</strong>：即文件的存储结构，指系统将文件存储在外存上所形成的一种存储组织形式，用户不可见。</p>
+<h3 id="文件逻辑结构"><a href="#文件逻辑结构" class="headerlink" title="文件逻辑结构"></a>文件逻辑结构</h3><p>分类：文件是否有结构、文件的组织方式。</p>
+<p>（1）是否有结构：有结构文件、无结构文件。</p>
+<p>①<strong>有结构文件</strong>：定长记录（相同的顺序和长度）、变长记录（长度不同：数据项数目不同、数据项本身长度不定）。</p>
+<p>②<strong>无结构文件</strong>：即流式文件，文件的长度以字节为单位，一个记录仅有一个字节。举例：源程序、可执行文件、库函数等采用流式文件。</p>
+<p>（2）文件的组织方式：顺序、索引、索引顺序。</p>
+<p>①顺序文件：由一系列记录按某种顺序排列所形成的的文件，可定长记录可变长记录。</p>
+<p>②索引文件：为可变长记录文件建立一张索引表，为每个记录设置一个表项，加速对记录的检索速度。</p>
+<p>③索引顺序文件：顺序文件与索引文件相结合，为一组记录中的第一个建立索引表项。</p>
+<h3 id="顺序文件"><a href="#顺序文件" class="headerlink" title="顺序文件"></a><strong>顺序文件</strong></h3><p>：顺序文件按排列方式分串结构（按存入时间先后排序）和顺序结构（按关键字排序）。顺序文件的优点是适用于记录的批量存取，所有逻辑文件中顺序文件存取效率最高；缺点是增删记录困难以及应用交互时性能差。顺序文件查找记录地址的方式有：隐式寻址方式和显式寻址方式，后者可实现对定长记录文件的直接或随机访问，却不适用于定长记录。</p>
+<h3 id="索引文件"><a href="#索引文件" class="headerlink" title="索引文件"></a><strong>索引文件</strong></h3><p>：按关键字建立索引，把对变长记录顺序文件的顺序检索转变为对定长记录索引文件的随机检索。</p>
+<h3 id="索引顺序文件特征"><a href="#索引顺序文件特征" class="headerlink" title="索引顺序文件特征"></a><strong>索引顺序文件</strong>特征</h3><p> ：克服了变长记录的顺序文件不能随机访问及记录不便删插的缺点；记录是按关键字的顺序组织的；引入文件索引表实现对索引顺序文件的随机访问；增加了溢出文件来记录新的增删改记录。</p>
+<h2 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h2><p><img src="http://img.jiangniao.top/20201227210446.png" alt="image-20201227210446151"></p>
+<p><img src="http://img.jiangniao.top/20201227210453.png" alt="image-20201227210453316"></p>
+<h3 id="系统调用基本概念"><a href="#系统调用基本概念" class="headerlink" title="系统调用基本概念"></a><strong>系统调用基本概念</strong></h3><p>在OS的核心中，都设置了一组用于实现各种系统功能的子程序（过程或函数），并将它们提供给用户应用程序调用。<br>系统调用本质上是应用程序请求OS内核完成某项功能时的一种过程调用。<br>系统调用与一般的过程调用的区别：<br>    运行在不同的系统状态<br>    通过软中断进入<br>    返回问题——返回时，CPU可能被别的进程抢占。<br>    嵌套调用——在一个系统调用执行期间，可以利用系统调用命令去调用另一个系统调用。 </p>
+<h3 id="系统调用的类型"><a href="#系统调用的类型" class="headerlink" title="系统调用的类型"></a><strong>系统调用的类型</strong></h3><p>1．进程控制类系统调用<br>    创建和终止进程的系统调用<br>    获得和设置进程属性的系统调用<br>    等待某事件出现的系统调用<br>2．文件操纵类系统调用<br>    创建和删除文件<br>    打开和关闭文件<br>    读和写文件<br>3．进程通信类系统调用 </p>
+<ol start="4">
+<li>设备管理类系统调用</li>
+<li>信息维护类系统调用</li>
+</ol>
+<p><img src="http://img.jiangniao.top/20201227210623.png" alt="image-20201227210623758"></p>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io">JiangNiao</a>
+            <p>原文链接：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io/2020/12/27/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/">https://github.com/Jiang-Niao/Jiang-Niao.github.io/2020/12/27/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/</a>
+            <p>发表日期：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io/2020/12/27/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/">December 27th 2020, 5:14:17 pm</a>
+            <p>更新日期：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io/2020/12/27/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/">December 27th 2020, 9:07:55 pm</a>
+            <p>版权声明：本文采用<a rel="license noopener" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2020/11/13/%E6%8A%A4%E7%BD%91%E6%94%BB%E9%98%B2%E6%BC%94%E7%BB%83%E6%80%BB%E7%BB%93/" title= "护网攻防演练总结">
+                    <div class="prevTitle">护网攻防演练总结</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- gitalk评论 -->
+
+    <!-- utteranc评论 -->
+
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:jiangniao66@163.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="https://github.com/Jiang-Niao" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#操作系统笔记"><span class="toc-number">1.</span> <span class="toc-text">操作系统笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#导论and引论"><span class="toc-number">1.1.</span> <span class="toc-text">导论and引论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是操作系统"><span class="toc-number">1.1.1.</span> <span class="toc-text">什么是操作系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OS的基本模块"><span class="toc-number">1.1.2.</span> <span class="toc-text">OS的基本模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OS的目标"><span class="toc-number">1.1.3.</span> <span class="toc-text">OS的目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#作用"><span class="toc-number">1.1.4.</span> <span class="toc-text">作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#操作系统定义"><span class="toc-number">1.1.5.</span> <span class="toc-text">操作系统定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基本类型"><span class="toc-number">1.1.6.</span> <span class="toc-text">基本类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#操作系统的基本特征"><span class="toc-number">1.1.7.</span> <span class="toc-text">操作系统的基本特征</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第二章进程描述与控制"><span class="toc-number">1.2.</span> <span class="toc-text">第二章进程描述与控制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#程序的顺序执行及其特征"><span class="toc-number">1.2.1.</span> <span class="toc-text">程序的顺序执行及其特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#程序的并发执行及其特征"><span class="toc-number">1.2.2.</span> <span class="toc-text">程序的并发执行及其特征</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程"><span class="toc-number">1.3.</span> <span class="toc-text">进程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#进程定义"><span class="toc-number">1.3.1.</span> <span class="toc-text">进程定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进程的特征："><span class="toc-number">1.3.2.</span> <span class="toc-text">进程的特征：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进程和线程的区别"><span class="toc-number">1.3.3.</span> <span class="toc-text">进程和线程的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#挂起操作"><span class="toc-number">1.3.4.</span> <span class="toc-text">挂起操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进程控制块-pcb"><span class="toc-number">1.3.5.</span> <span class="toc-text">进程控制块 pcb</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进程控制"><span class="toc-number">1.3.6.</span> <span class="toc-text">进程控制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程同步"><span class="toc-number">1.4.</span> <span class="toc-text">进程同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程通信"><span class="toc-number">1.5.</span> <span class="toc-text">进程通信</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程和线程-比较"><span class="toc-number">1.6.</span> <span class="toc-text">进程和线程 比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程（thread）管理"><span class="toc-number">1.7.</span> <span class="toc-text">线程（thread）管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#处理机调度与死锁"><span class="toc-number">1.8.</span> <span class="toc-text">处理机调度与死锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#处理机调度的基本概念"><span class="toc-number">1.8.1.</span> <span class="toc-text">处理机调度的基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#处理机调度的层次"><span class="toc-number">1.8.2.</span> <span class="toc-text">处理机调度的层次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#高级调度"><span class="toc-number">1.8.3.</span> <span class="toc-text">高级调度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#低级调度"><span class="toc-number">1.8.4.</span> <span class="toc-text">低级调度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#中级调度（Intermediate-Level-Scheduling）"><span class="toc-number">1.8.5.</span> <span class="toc-text">中级调度（Intermediate-Level Scheduling）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三种调度的频率和复杂度"><span class="toc-number">1.8.6.</span> <span class="toc-text">三种调度的频率和复杂度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#调度队列模型"><span class="toc-number">1.8.7.</span> <span class="toc-text">调度队列模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#选择调度方式和调度算法的若干准则"><span class="toc-number">1.8.8.</span> <span class="toc-text">选择调度方式和调度算法的若干准则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#调度算法"><span class="toc-number">1.9.</span> <span class="toc-text">调度算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#高优先权优先调度算法"><span class="toc-number">1.9.1.</span> <span class="toc-text">高优先权优先调度算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#轮转调度算法"><span class="toc-number">1.9.2.</span> <span class="toc-text">轮转调度算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多级反馈队列调度算法"><span class="toc-number">1.9.3.</span> <span class="toc-text">多级反馈队列调度算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#死锁"><span class="toc-number">1.9.4.</span> <span class="toc-text">死锁</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储器管理"><span class="toc-number">1.10.</span> <span class="toc-text">存储器管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#存储器的层次结构"><span class="toc-number">1.10.1.</span> <span class="toc-text">存储器的层次结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#程序的装入和链接"><span class="toc-number">1.10.2.</span> <span class="toc-text">程序的装入和链接</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存分区和分页"><span class="toc-number">1.11.</span> <span class="toc-text">内存分区和分页</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#连续分配存储管理方式"><span class="toc-number">1.11.1.</span> <span class="toc-text">连续分配存储管理方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分页存储管理方式"><span class="toc-number">1.11.2.</span> <span class="toc-text">分页存储管理方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#两级和多级页表"><span class="toc-number">1.11.3.</span> <span class="toc-text">两级和多级页表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#段页式存储管理方式"><span class="toc-number">1.11.4.</span> <span class="toc-text">段页式存储管理方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#引入原因："><span class="toc-number">1.11.5.</span> <span class="toc-text">引入原因：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基本原理"><span class="toc-number">1.11.6.</span> <span class="toc-text">基本原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#虚拟存储器"><span class="toc-number">1.12.</span> <span class="toc-text">虚拟存储器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#请求分页存储管理方式"><span class="toc-number">1.12.1.</span> <span class="toc-text">请求分页存储管理方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内存分配"><span class="toc-number">1.12.2.</span> <span class="toc-text">内存分配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#页面调入策略"><span class="toc-number">1.12.3.</span> <span class="toc-text">页面调入策略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#页面置换算法详解"><span class="toc-number">1.13.</span> <span class="toc-text">页面置换算法详解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输入输出系统"><span class="toc-number">1.14.</span> <span class="toc-text">输入输出系统</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#设备分类（按照信息交换基本单位分类）"><span class="toc-number">1.14.0.1.</span> <span class="toc-text">设备分类（按照信息交换基本单位分类）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#块设备："><span class="toc-number">1.14.0.1.1.</span> <span class="toc-text">块设备：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#字符设备："><span class="toc-number">1.14.0.1.2.</span> <span class="toc-text">字符设备：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设备控制器"><span class="toc-number">1.14.1.</span> <span class="toc-text">设备控制器</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#设备控制器的功能"><span class="toc-number">1.14.1.0.1.</span> <span class="toc-text">设备控制器的功能</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#磁盘存储器的性能和调度"><span class="toc-number">1.15.</span> <span class="toc-text">磁盘存储器的性能和调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#如何在磁盘中读-写数据？"><span class="toc-number">1.15.1.</span> <span class="toc-text">如何在磁盘中读&#x2F;写数据？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#磁盘的物理地址"><span class="toc-number">1.15.2.</span> <span class="toc-text">磁盘的物理地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一次磁盘读-写操作需要的时间"><span class="toc-number">1.15.3.</span> <span class="toc-text">一次磁盘读&#x2F;写操作需要的时间</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#磁盘调度算法"><span class="toc-number">1.16.</span> <span class="toc-text">磁盘调度算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、先来先服务FCFS"><span class="toc-number">1.16.1.</span> <span class="toc-text">1、先来先服务FCFS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、最短寻找时间优先SSTF"><span class="toc-number">1.16.2.</span> <span class="toc-text">2、最短寻找时间优先SSTF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、扫描算法SCAN"><span class="toc-number">1.16.3.</span> <span class="toc-text">3、扫描算法SCAN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4、循环扫描算法C-SCAN"><span class="toc-number">1.16.4.</span> <span class="toc-text">4、循环扫描算法C-SCAN</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件管理"><span class="toc-number">1.17.</span> <span class="toc-text">文件管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#文件管理，由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文件进行管理是操作系统实现的目标。"><span class="toc-number">1.17.0.1.</span> <span class="toc-text">文件管理，由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文件进行管理是操作系统实现的目标。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件的属性"><span class="toc-number">1.17.1.</span> <span class="toc-text">文件的属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件类型"><span class="toc-number">1.17.2.</span> <span class="toc-text">文件类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件操作"><span class="toc-number">1.17.3.</span> <span class="toc-text">文件操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件结构"><span class="toc-number">1.17.4.</span> <span class="toc-text">文件结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件逻辑结构"><span class="toc-number">1.17.5.</span> <span class="toc-text">文件逻辑结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#顺序文件"><span class="toc-number">1.17.6.</span> <span class="toc-text">顺序文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#索引文件"><span class="toc-number">1.17.7.</span> <span class="toc-text">索引文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#索引顺序文件特征"><span class="toc-number">1.17.8.</span> <span class="toc-text">索引顺序文件特征</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口"><span class="toc-number">1.18.</span> <span class="toc-text">接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#系统调用基本概念"><span class="toc-number">1.18.1.</span> <span class="toc-text">系统调用基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#系统调用的类型"><span class="toc-number">1.18.2.</span> <span class="toc-text">系统调用的类型</span></a></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 33
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/03/24/PHP%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%97%E7%AC%A6%E9%80%83%E9%80%B8/" >php反序列化字符逃逸</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/27</span><a class="archive-post-title" href= "/2020/12/27/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/" >操作系统笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/13</span><a class="archive-post-title" href= "/2020/11/13/UNCTF%20%E5%87%BA%E9%A2%98%E7%AC%94%E8%AE%B0/" >UNCTF 出题笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/2020%E5%BC%BA%E7%BD%91%E6%9D%AFweb/" >2020强网杯web</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/p%E7%A5%9EBash%20Curl%E5%8F%82%E6%95%B0%E6%B3%A8%E5%85%A5%E7%90%86%E8%A7%A3/" >p神Bash Curl参数注入理解</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/25</span><a class="archive-post-title" href= "/2020/04/25/%E5%AE%89%E6%81%92%E6%9C%88%E8%B5%9B%E5%9B%9B%E6%9C%88wp/" >安恒月赛四月web-wp</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/02</span><a class="archive-post-title" href= "/2020/04/02/%E5%A6%82%E4%BD%95%E4%BB%8E%E6%A0%B9%E6%9C%AC%E8%A7%A3%E5%86%B3hexo%E4%B8%8D%E5%85%BC%E5%AE%B9%E6%A0%87%E7%AD%BE%E9%97%AE%E9%A2%98/" >如何从根本解决hexo不兼容标签问题</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/02</span><a class="archive-post-title" href= "/2020/04/02/SSTi%20%E5%85%A8%E8%A7%A3%E6%9E%90/" >SSTi 学习(持续待更新)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/MRCTF-web/" >MRCTF部分web</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/sqli-labs%E7%BB%83%E4%B9%A0/" >sqli-labs练习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/12</span><a class="archive-post-title" href= "/2019/11/12/UNCTF%E5%AE%89%E6%81%92%E5%A4%8D%E7%8E%B0/" >UNCTF的赛后复现</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2019/11/04/%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5/" >堆叠注入的简单学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/29</span><a class="archive-post-title" href= "/2019/10/29/RSA%E5%88%9D%E6%8E%A2/" >初识RSA （持续更新）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/18</span><a class="archive-post-title" href= "/2019/10/18/HCTF2018%20WarmUp%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A/" >HCTF2018 （持续更新）</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/01/20/docker%E5%BB%BA%E7%AB%8Bphp+mysql+apache%E7%9A%84web%E7%8E%AF%E5%A2%83/" >docker建立php+mysql+apache的web环境</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/06/11/hello-world/" >在搭建博客的问题解决方案以及优化</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/21</span><a class="archive-post-title" href= "/2020/08/21/2020ciscn%E5%88%9D%E8%B5%9B/" >2020ciscn初赛</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/11</span><a class="archive-post-title" href= "/2019/09/11/sql%E6%B3%A8%E5%85%A5%E6%B5%85%E6%9E%90/" >sql注入浅析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/11</span><a class="archive-post-title" href= "/2019/07/11/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" >ctf中的php反序列化</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/06/11/python%E7%88%AC%E8%99%AB%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0/" >python爬虫简单学习</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2019/07/17/%E5%90%84%E7%A7%8D%E6%83%85%E5%86%B5%E5%8F%8D%E5%BC%B9shell/" >各种情况下反弹shell</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/07/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" >浅析文件上传</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/09/22/%E5%AF%86%E7%A0%81%E5%AD%A6/" >古典古典密码</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/24</span><a class="archive-post-title" href= "/2020/04/24/%E4%BB%8Ectf%E9%A2%98%E7%9B%AE%E4%B8%AD%E5%AD%A6%E4%B9%A0xpath%E6%B3%A8%E5%85%A5/" >从ctf题目中学习xpath注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2020/03/14/%E6%B1%9F%E9%B8%9F2020.3%20awd%E8%AE%B0%E5%BD%95/" >2020.3 awd记录</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/10/18/%E6%A8%A1%E7%89%88%E6%B3%A8%E5%85%A5/" >模版注入</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/03/28/CISCN%202019%E5%88%9D%E8%B5%9B/" >CISCN 2019初赛 Love Math</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/04/01/CISCN2019%20%E5%8D%8E%E4%B8%9C%E5%8D%97%E8%B5%9B%E5%8C%BA%20buu%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/" >CISCN2019 华东南赛区 buu复现笔记</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/04/03/CISCN2019%20%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BAbuu%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/" >CISCN2019 华北赛区 buu复现笔记</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/03/13/updatexml()%E3%80%81extractvalue()%20%E6%8A%A5%E9%94%99%E5%9E%8BSQL%E6%B3%A8%E5%85%A5/" >sql报错注入：extractvalue、updatexml</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/07/12/Java%E5%AD%A6%E4%B9%A0%E6%9C%89%E5%85%B3%E9%87%8D%E5%86%99%E5%92%8C%E9%87%8D%E8%BD%BD/" >Java学习有关重写和重载</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/04/03/%E4%BB%8Ectf%E4%B8%AD%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8%E5%88%A9%E7%94%A8SoapClient%E7%B1%BB%E7%9A%84SSRF+CRLF%E6%94%BB%E5%87%BB/" >从ctf中学习利用利用SoapClient类的SSRF+CRLF攻击</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/11/13/%E6%8A%A4%E7%BD%91%E6%94%BB%E9%98%B2%E6%BC%94%E7%BB%83%E6%80%BB%E7%BB%93/" >护网攻防演练总结</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="web"><span class="iconfont-archer">&#xe606;</span>web</span>
+    
+        <span class="sidebar-tag-name" data-tags="ctf"><span class="iconfont-archer">&#xe606;</span>ctf</span>
+    
+        <span class="sidebar-tag-name" data-tags="crypto"><span class="iconfont-archer">&#xe606;</span>crypto</span>
+    
+        <span class="sidebar-tag-name" data-tags="docker"><span class="iconfont-archer">&#xe606;</span>docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="入门"><span class="iconfont-archer">&#xe606;</span>入门</span>
+    
+        <span class="sidebar-tag-name" data-tags="WEB"><span class="iconfont-archer">&#xe606;</span>WEB</span>
+    
+        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="web"><span class="iconfont-archer">&#xe60a;</span>web</span>
+    
+        <span class="sidebar-category-name" data-categories="crypto"><span class="iconfont-archer">&#xe60a;</span>crypto</span>
+    
+        <span class="sidebar-category-name" data-categories="docker"><span class="iconfont-archer">&#xe60a;</span>docker</span>
+    
+        <span class="sidebar-category-name" data-categories="awd"><span class="iconfont-archer">&#xe60a;</span>awd</span>
+    
+        <span class="sidebar-category-name" data-categories="awd/web"><span class="iconfont-archer">&#xe60a;</span>awd/web</span>
+    
+        <span class="sidebar-category-name" data-categories="WEB"><span class="iconfont-archer">&#xe60a;</span>WEB</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "JiangNiao"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
