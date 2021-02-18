@@ -355,6 +355,87 @@
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2020/03/13/updatexml()%E3%80%81extractvalue()%20%E6%8A%A5%E9%94%99%E5%9E%8BSQL%E6%B3%A8%E5%85%A5/" >
+            
+                <span>sql报错注入：extractvalue、updatexml</span>
+        </a>
+        <div class="abstract-content">
+            sql报错注入：extractvalue、updatexmlextractvalue报错原理MySQL 5.1.5版本中添加了对XML文档进行查询和修改的两个函数：extractvalue、updatexml
+
+
+
+名称
+描述
+
+
+
+ExtractValue()
+使用XPath表示法从XML字符串中提取值
+
+
+UpdateXML()
+返回替换的XML片段
+
+
+通过这两个函数可以完成报错注入
+ExtractValue(xml_frag, xpath_expr)
+ExtractValue()接受两个字符串参数，一个XML标记片段 xml_frag和一个XPath表达式 xpath_expr（...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/03/13</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "WEB">WEB</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2020/01/20/docker%E5%BB%BA%E7%AB%8Bphp+mysql+apache%E7%9A%84web%E7%8E%AF%E5%A2%83/" >
+            
+                <span>docker建立php+mysql+apache的web环境</span>
+        </a>
+        <div class="abstract-content">
+            <p>这是Apache的,之后更新Nginx</p>
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/01/20</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "web">web</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "docker">docker</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2019/12/08/sqli-labs%E7%BB%83%E4%B9%A0/" >
             
                 <span>sqli-labs练习</span>
@@ -579,68 +660,6 @@
             <!-- date  -->
             <div class="abstract-date">
                 <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/09/11</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "web">web</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "ctf">ctf</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/07/17/%E5%90%84%E7%A7%8D%E6%83%85%E5%86%B5%E5%8F%8D%E5%BC%B9shell/" >
-            
-                <span>各种情况下反弹shell</span>
-        </a>
-        <div class="abstract-content">
-            <p>反弹shell的学习</p>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/17</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "web">web</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "ctf">ctf</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/07/11/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" >
-            
-                <span>ctf中的php反序列化</span>
-        </a>
-        <div class="abstract-content">
-            <p>最近在看反序列化，顺便找了几个例题。</p>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/11</span>
             </div>
             <!-- tags  -->
             
@@ -1160,9 +1179,41 @@
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 33
+        Total : 35
         </div>
         <!-- search  -->
         
@@ -1179,6 +1230,20 @@
     
         <li class="archive-post-item">
             <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/03/24/PHP%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%97%E7%AC%A6%E9%80%83%E9%80%B8/" >php反序列化字符逃逸</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/08</span><a class="archive-post-title" href= "/2021/02/08/php%E4%B8%AD%E7%9A%84%E5%8D%B1%E9%99%A9%E5%87%BD%E6%95%B0/" >php中的危险函数</a>
         </li>
     
     
@@ -1510,6 +1575,20 @@
     
         <li class="archive-post-item">
             <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/11/13/%E6%8A%A4%E7%BD%91%E6%94%BB%E9%98%B2%E6%BC%94%E7%BB%83%E6%80%BB%E7%BB%93/" >护网攻防演练总结</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2021/02/08/TP%20v5.0.24%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE/" >TP v5.0.24 反序列化链学习</a>
         </li>
     
     </div>
