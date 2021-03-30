@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="JiangNiao">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="JiangNiao">
+    
+    <meta name="keywords" content="hexo,网络安全,hexo-blog">
+    
+    <meta name="description" content="一起努力">
+    <meta name="description" content="简单分析一下shiro550反序列化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="shiro550分析">
+<meta property="og:url" content="https://github.com/Jiang-Niao/Jiang-Niao.github.io/2021/03/28/shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/index.html">
+<meta property="og:site_name" content="江鸟&#39;s Bolg">
+<meta property="og:description" content="简单分析一下shiro550反序列化">
+<meta property="og:image" content="http://img.jiangniao.top/20210328172801.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210328175132.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210328175553.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210329100605.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210329101722.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210329102203.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210329103032.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210329103829.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210329104732.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210329112521.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210329112655.png">
+<meta property="og:image" content="http://img.jiangniao.top/20210329113050.png">
+<meta property="article:published_time" content="2021-03-28T09:19:13.463Z">
+<meta property="article:modified_time" content="2021-03-30T07:54:40.382Z">
+<meta property="article:author" content="JiangNiao">
+<meta property="article:tag" content="web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://img.jiangniao.top/20210328172801.png">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    
+    <title>shiro550分析 · 江鸟&#39;s Blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/jn.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >江鸟&#39;s Blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">shiro550分析</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>江鸟's Blog</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(http://img.jiangniao.top/20201115162121.png)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            shiro550分析
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "web">web</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">1.4k</span>阅读时长: <span class="post-count reading-time">5 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2021/03/28</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>简单分析一下shiro550反序列化</p>
+<a id="more"></a>
+
+<p>shiro反序列化</p>
+<h1 id="环境下载"><a href="#环境下载" class="headerlink" title="环境下载"></a>环境下载</h1><p>下载大佬写好的war包</p>
+<p><a href="https://cloud.tencent.com/developer/article/1472310" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1472310</a></p>
+<p>放到tomcat的路径webapps下，启动tomcat，就会自动解压</p>
+<p>然后用idea打开文件夹</p>
+<p>用IDEA内置tomcat部署即可<img src="http://img.jiangniao.top/20210328172801.png" alt="image-20210328172800959"></p>
+<h1 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h1><h2 id="前置条件"><a href="#前置条件" class="headerlink" title="前置条件"></a>前置条件</h2><p>在漏洞的首页</p>
+<p><a href="https://issues.apache.org/jira/browse/SHIRO-550" target="_blank" rel="noopener">https://issues.apache.org/jira/browse/SHIRO-550</a></p>
+<p><img src="http://img.jiangniao.top/20210328175132.png" alt="image-20210328175132072"></p>
+<p>在这里获取到的信息：</p>
+<ul>
+<li>CookieRememberMeManager这是一个入口</li>
+<li>功能点是remember me 这个功能点</li>
+<li>使用了AES 解密和 Base64加密</li>
+<li>使用Java序列化（<code>ObjectInputStream</code>）反序列化</li>
+<li>源代码存在默认的AES加密密钥，所有能够查看源代码的人都可以知道默认密钥是什么</li>
+</ul>
+<p>首先进行测试一下正常功能点</p>
+<p>我们进入<code>login.jsp</code>进行查看，登陆的时候有一个<code>rememeber me</code>功能点，勾选上</p>
+<p>登陆之后在cookie中发现remember me字段</p>
+<p><img src="http://img.jiangniao.top/20210328175553.png" alt="image-20210328175553810"></p>
+<p>而shiro每次都会对cookie中的rememberMe来进行解密后反序列化操作来确定访问者权限，所以直接在cookie传输rememberMe参数就可以控制shiro反序列化的值</p>
+<h2 id="debug"><a href="#debug" class="headerlink" title="debug"></a>debug</h2><p><strong>第二个目的</strong>是获得加密解密的方法，以此来自行加密解密恶意payload进行传输</p>
+<p>IDEA中按两次shift 搜索咱们前面准备当做入口点的CookieRememberMeManager类，按着函数列表查看后并未发现有关加密的信息，so跟进父类AbstractRememberMeManager去看一下</p>
+<p>在这里前几行就有一个特殊的字符串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private static final byte[] DEFAULT_CIPHER_KEY_BYTES &#x3D; Base64.decode(&quot;kPH+bIxk5D2deZiIxcaaaA&#x3D;&#x3D;&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>根据前面我们在官网漏洞报告中得到的信息 这应该就是默认的AES密钥</p>
+<p>查看这个参数在哪进行了使用</p>
+<p><img src="http://img.jiangniao.top/20210329100605.png" alt="image-20210329100605140"></p>
+<p>跟进<code>setCipherKey(DEFAULT_CIPHER_KEY_BYTES)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCipherKey</span><span class="params">(<span class="keyword">byte</span>[] cipherKey)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.setEncryptionCipherKey(cipherKey);</span><br><span class="line">        <span class="keyword">this</span>.setDecryptionCipherKey(cipherKey);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setEncryptionCipherKey</span><span class="params">(<span class="keyword">byte</span>[] encryptionCipherKey)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.encryptionCipherKey = encryptionCipherKey;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDecryptionCipherKey</span><span class="params">(<span class="keyword">byte</span>[] decryptionCipherKey)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.decryptionCipherKey = decryptionCipherKey;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>继续往下看 能找到一个encrypt函数，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">byte</span>[] encrypt(<span class="keyword">byte</span>[] serialized) &#123;</span><br><span class="line">    <span class="keyword">byte</span>[] value = serialized;</span><br><span class="line">    CipherService cipherService = <span class="keyword">this</span>.getCipherService();</span><br><span class="line">    <span class="keyword">if</span> (cipherService != <span class="keyword">null</span>) &#123;</span><br><span class="line">        ByteSource byteSource = cipherService.encrypt(serialized, <span class="keyword">this</span>.getEncryptionCipherKey());</span><br><span class="line">        value = byteSource.getBytes();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>传入的serialized的值是我刚才web端登录的用户名root序列化后的数据</p>
+<p>根据运行步骤函数名猜测流程是shiro验证完了登录的账号密码，然后根据用户名生成序列化数据准备进行加密了</p>
+<p><img src="http://img.jiangniao.top/20210329101722.png" alt="image-20210329101722079"></p>
+<p>在这里的<code>cipherService</code>是一个新的对象，去查看他的源码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">org.apache.shiro.crypto.AesCipherService</span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> org.apache.shiro.crypto;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AesCipherService</span> <span class="keyword">extends</span> <span class="title">DefaultBlockCipherService</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String ALGORITHM_NAME = <span class="string">"AES"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AesCipherService</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(<span class="string">"AES"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>继续debug可以看到AES加密的模式</p>
+<p><img src="http://img.jiangniao.top/20210329102203.png" alt="image-20210329102203725"></p>
+<p>继续debug，跳转到<code>org.apache.shiro.crypto.JcaCipherService#encrypt(byte[], byte[])</code></p>
+<p><img src="http://img.jiangniao.top/20210329103032.png" alt="image-20210329103032785"></p>
+<p>在这里的ivBytes是随机生成的长度为16的字节</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">return this.encrypt(plaintext, key, ivBytes, generate);</span><br><span class="line"></span><br><span class="line">plaintext 为 序列化的用户名</span><br><span class="line">key 为 DEFAULT_CIPHER_KEY_BYTES 就是上面base64解码的那个密钥</span><br><span class="line">ivBytes 为 随机生成的长度为16的字节</span><br><span class="line">generate 为 true</span><br></pre></td></tr></table></figure>
+
+<p>跳转至<code>org.apache.shiro.crypto.JcaCipherService#encrypt(byte[], byte[], byte[], boolean)</code></p>
+<p>传递的参数如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">plaintext没变</span><br><span class="line">key没变</span><br><span class="line">iv&#x3D;ivBytes</span><br><span class="line">prependIv&#x3D;generate</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://img.jiangniao.top/20210329103829.png" alt="image-20210329103829176"></p>
+<p>继续跟进</p>
+<p>新建一个字节类型的参数名为output，长度为iv的长度加上encrypted长度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.arraycopy(iv, 0, output, 0, iv.length);</span><br><span class="line">System.arraycopy(encrypted, 0, output, iv.length, encrypted.length);</span><br></pre></td></tr></table></figure>
+
+<p>这两行是进行了一个复制操作，将iv的内容复制到encrypted中，并赋值给output</p>
+<p>所以output的值为随机生成的16位iv+AES加密结果</p>
+<p>继续debug，发现传递的参数回到了最开始的encrypt、</p>
+<p>继续debug，最终到了CookieRememberMeManager类中的rememberSerializedIdentity方法又对存储着加密结果的变量进行了一次base64加密，然后赋值到了cookie的rememberMe参数中，到此加密过程结束。</p>
+<p><img src="http://img.jiangniao.top/20210329104732.png" alt="image-20210329104732816"></p>
+<h2 id="加密总结"><a href="#加密总结" class="headerlink" title="加密总结"></a>加密总结</h2><p><strong>最终总结加密过程为</strong>：</p>
+<p>设定：<strong>密钥</strong> = kPH+bIxk5D2deZiIxcaaaA==</p>
+<p>1.获得明文 = 正常识序列化用户名后的字节(root)</p>
+<p>2.以下步骤：</p>
+<ul>
+<li>科普知识：正常的AES加密所需参数 = 想加密的字符串 + iv + key + CBC + padding</li>
+<li>shiro：AES加密 = 想加密的字符串 (<code>明文</code>) + iv(<code>随机生成的长度为16的字节</code>) + key(<code>base64解码**密钥**的结果</code>) + CBC + PKCS5Padding</li>
+</ul>
+<p>3.随机生成的长度为16的字节 + AES加密结果 (就是拼接了一下)</p>
+<p>4.base64加密</p>
+<p><strong>那么解密过程为</strong>:</p>
+<p>设定：<strong>密钥</strong> = kPH+bIxk5D2deZiIxcaaaA==</p>
+<p>1.获得密文 = base64解密rememberMe参数传过来的值</p>
+<p>2.以下步骤：</p>
+<ul>
+<li>科普知识：正常的AES解密所需参数 = 想解密的字符串 + iv + key + CBC</li>
+<li>shiro：AES解密 = 想解密的字符串(<code>删除密文前16个字节的剩余字节</code>)+iv(<code>密文的前16个字节</code>) + key(<code>base64解码**密钥**的结果</code>) + CBC + PKCS5Padding</li>
+</ul>
+<p>3.对解密结果进行反序列化，触发payload</p>
+<h2 id="解密部分"><a href="#解密部分" class="headerlink" title="解密部分"></a>解密部分</h2><p>看一下最终触发反序列化的地方在哪里，按照加密方法调试过程，在解密方法<code>org.apache.shiro.mgt.AbstractRememberMeManager#decrypt</code>处添加断点</p>
+<p>其中serialized就是我们传入的cookie base64解码的结果</p>
+<p>后面的步骤大致相似，直接到了<code>org.apache.shiro.mgt.AbstractRememberMeManager#convertBytesToPrincipals</code>这个函数</p>
+<p><img src="http://img.jiangniao.top/20210329112521.png" alt="image-20210329112521447"></p>
+<p>在这里进行了一种对象流的序列化</p>
+<p>最后在调用readObject()完成了反序列化</p>
+<p><img src="http://img.jiangniao.top/20210329112655.png" alt="image-20210329112655454"></p>
+<p><img src="http://img.jiangniao.top/20210329113050.png" alt="image-20210329113050245"></p>
+<p>解密时：从cookie中取出、base64解密、decrypt解密、反序列化</p>
+<h1 id="如何攻击"><a href="#如何攻击" class="headerlink" title="如何攻击"></a>如何攻击</h1><p>根据我们的分析来写poc</p>
+<p>POC的加密流程就是：</p>
+<ol>
+<li>获取到 反序列化的数据</li>
+<li>设置AES加密模式，使用AES.MODE_CBC的分块模式</li>
+<li>设置硬编码的 key</li>
+<li>使用随机数生成 16 字节的 iv</li>
+<li>使用 iv + AES加密(反序列化数据) 拼接</li>
+<li>最后base64加密全部内容</li>
+</ol>
+<p>命令执行还是需要cc链等利用链， shiro自带cc3.2.1，这一条是无法直接利用的</p>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io">JiangNiao</a>
+            <p>原文链接：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io/2021/03/28/shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">https://github.com/Jiang-Niao/Jiang-Niao.github.io/2021/03/28/shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</a>
+            <p>发表日期：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io/2021/03/28/shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">March 28th 2021, 5:19:13 pm</a>
+            <p>更新日期：<a href="https://github.com/Jiang-Niao/Jiang-Niao.github.io/2021/03/28/shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">March 30th 2021, 3:54:40 pm</a>
+            <p>版权声明：本文采用<a rel="license noopener" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2021/03/26/sctf2020%E8%AE%B0%E5%BD%95/" title= "sctf2020记录">
+                    <div class="prevTitle">sctf2020记录</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- gitalk评论 -->
+
+    <!-- utteranc评论 -->
+
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:jiangniao66@163.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="https://github.com/Jiang-Niao" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#环境下载"><span class="toc-number">1.</span> <span class="toc-text">环境下载</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代码分析"><span class="toc-number">2.</span> <span class="toc-text">代码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前置条件"><span class="toc-number">2.1.</span> <span class="toc-text">前置条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#debug"><span class="toc-number">2.2.</span> <span class="toc-text">debug</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#加密总结"><span class="toc-number">2.3.</span> <span class="toc-text">加密总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解密部分"><span class="toc-number">2.4.</span> <span class="toc-text">解密部分</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#如何攻击"><span class="toc-number">3.</span> <span class="toc-text">如何攻击</span></a></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 42
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/03/24/PHP%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%97%E7%AC%A6%E9%80%83%E9%80%B8/" >php反序列化字符逃逸</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/28</span><a class="archive-post-title" href= "/2021/03/28/shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" >shiro550分析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/26</span><a class="archive-post-title" href= "/2021/03/26/sctf2020%E8%AE%B0%E5%BD%95/" >sctf2020记录</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/08</span><a class="archive-post-title" href= "/2021/02/08/php%E4%B8%AD%E7%9A%84%E5%8D%B1%E9%99%A9%E5%87%BD%E6%95%B0/" >php中的危险函数</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/27</span><a class="archive-post-title" href= "/2020/12/27/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/" >操作系统笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/13</span><a class="archive-post-title" href= "/2020/11/13/UNCTF%20%E5%87%BA%E9%A2%98%E7%AC%94%E8%AE%B0/" >UNCTF 出题笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/24</span><a class="archive-post-title" href= "/2020/08/24/2020%E5%BC%BA%E7%BD%91%E6%9D%AFweb/" >2020强网杯web</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2020/05/21/p%E7%A5%9EBash%20Curl%E5%8F%82%E6%95%B0%E6%B3%A8%E5%85%A5%E7%90%86%E8%A7%A3/" >p神Bash Curl参数注入理解</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/25</span><a class="archive-post-title" href= "/2020/04/25/%E5%AE%89%E6%81%92%E6%9C%88%E8%B5%9B%E5%9B%9B%E6%9C%88wp/" >安恒月赛四月web-wp</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/02</span><a class="archive-post-title" href= "/2020/04/02/%E5%A6%82%E4%BD%95%E4%BB%8E%E6%A0%B9%E6%9C%AC%E8%A7%A3%E5%86%B3hexo%E4%B8%8D%E5%85%BC%E5%AE%B9%E6%A0%87%E7%AD%BE%E9%97%AE%E9%A2%98/" >如何从根本解决hexo不兼容标签问题</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/02</span><a class="archive-post-title" href= "/2020/04/02/SSTi%20%E5%85%A8%E8%A7%A3%E6%9E%90/" >SSTi 学习(持续待更新)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2020/03/27/MRCTF-web/" >MRCTF部分web</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/sqli-labs%E7%BB%83%E4%B9%A0/" >sqli-labs练习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/12</span><a class="archive-post-title" href= "/2019/11/12/UNCTF%E5%AE%89%E6%81%92%E5%A4%8D%E7%8E%B0/" >UNCTF的赛后复现</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/04</span><a class="archive-post-title" href= "/2019/11/04/%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5/" >堆叠注入的简单学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/29</span><a class="archive-post-title" href= "/2019/10/29/RSA%E5%88%9D%E6%8E%A2/" >初识RSA （持续更新）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/18</span><a class="archive-post-title" href= "/2019/10/18/HCTF2018%20WarmUp%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A/" >HCTF2018 （持续更新）</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/01/20/docker%E5%BB%BA%E7%AB%8Bphp+mysql+apache%E7%9A%84web%E7%8E%AF%E5%A2%83/" >docker建立php+mysql+apache的web环境</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/06/11/hello-world/" >在搭建博客的问题解决方案以及优化</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/21</span><a class="archive-post-title" href= "/2020/08/21/2020ciscn%E5%88%9D%E8%B5%9B/" >2020ciscn初赛</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/11</span><a class="archive-post-title" href= "/2019/09/11/sql%E6%B3%A8%E5%85%A5%E6%B5%85%E6%9E%90/" >sql注入浅析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/11</span><a class="archive-post-title" href= "/2019/07/11/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" >ctf中的php反序列化</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/06/11/python%E7%88%AC%E8%99%AB%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0/" >python爬虫简单学习</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/17</span><a class="archive-post-title" href= "/2019/07/17/%E5%90%84%E7%A7%8D%E6%83%85%E5%86%B5%E5%8F%8D%E5%BC%B9shell/" >各种情况下反弹shell</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/07/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" >浅析文件上传</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/09/22/%E5%AF%86%E7%A0%81%E5%AD%A6/" >古典古典密码</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/24</span><a class="archive-post-title" href= "/2020/04/24/%E4%BB%8Ectf%E9%A2%98%E7%9B%AE%E4%B8%AD%E5%AD%A6%E4%B9%A0xpath%E6%B3%A8%E5%85%A5/" >从ctf题目中学习xpath注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2020/03/14/%E6%B1%9F%E9%B8%9F2020.3%20awd%E8%AE%B0%E5%BD%95/" >2020.3 awd记录</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/10/18/%E6%A8%A1%E7%89%88%E6%B3%A8%E5%85%A5/" >模版注入</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/03/28/CISCN%202019%E5%88%9D%E8%B5%9B/" >CISCN 2019初赛 Love Math</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/04/01/CISCN2019%20%E5%8D%8E%E4%B8%9C%E5%8D%97%E8%B5%9B%E5%8C%BA%20buu%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/" >CISCN2019 华东南赛区 buu复现笔记</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/04/03/CISCN2019%20%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BAbuu%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/" >CISCN2019 华北赛区 buu复现笔记</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/03/13/updatexml()%E3%80%81extractvalue()%20%E6%8A%A5%E9%94%99%E5%9E%8BSQL%E6%B3%A8%E5%85%A5/" >sql报错注入：extractvalue、updatexml</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/07/12/Java%E5%AD%A6%E4%B9%A0%E6%9C%89%E5%85%B3%E9%87%8D%E5%86%99%E5%92%8C%E9%87%8D%E8%BD%BD/" >Java学习有关重写和重载</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/04/03/%E4%BB%8Ectf%E4%B8%AD%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8%E5%88%A9%E7%94%A8SoapClient%E7%B1%BB%E7%9A%84SSRF+CRLF%E6%94%BB%E5%87%BB/" >从ctf中学习利用利用SoapClient类的SSRF+CRLF攻击</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/11/13/%E6%8A%A4%E7%BD%91%E6%94%BB%E9%98%B2%E6%BC%94%E7%BB%83%E6%80%BB%E7%BB%93/" >护网攻防演练总结</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2021/02/08/TP%20v5.0.24%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE/" >TP v5.0.24 反序列化链学习</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2021/02/18/thinkphp5.1.X%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%88%A9%E7%94%A8%E9%93%BE%E5%AE%A1%E8%AE%A1/" >thinkphp5.1.X反序列化利用链审计</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2021/03/04/HVV%E8%93%9D%E9%98%9F%E6%80%9D%E8%B7%AF%E5%AD%A6%E4%B9%A0/" >HVV蓝队应急响应思路学习(Windows)</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2021/03/04/HVV%E8%93%9D%E9%98%9F%E6%80%9D%E8%B7%AF%E5%AD%A6%E4%B9%A0linux%E7%AF%87/" >HVV蓝队应急响应思路学习(linux)</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2021/02/19/redies%20%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3/" >redies 的个人理解</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2021/02/25/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8%E4%B9%8BCSP/" >前端安全之CSP</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="web"><span class="iconfont-archer">&#xe606;</span>web</span>
+    
+        <span class="sidebar-tag-name" data-tags="ctf"><span class="iconfont-archer">&#xe606;</span>ctf</span>
+    
+        <span class="sidebar-tag-name" data-tags="crypto"><span class="iconfont-archer">&#xe606;</span>crypto</span>
+    
+        <span class="sidebar-tag-name" data-tags="docker"><span class="iconfont-archer">&#xe606;</span>docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="入门"><span class="iconfont-archer">&#xe606;</span>入门</span>
+    
+        <span class="sidebar-tag-name" data-tags="WEB"><span class="iconfont-archer">&#xe606;</span>WEB</span>
+    
+        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="web"><span class="iconfont-archer">&#xe60a;</span>web</span>
+    
+        <span class="sidebar-category-name" data-categories="crypto"><span class="iconfont-archer">&#xe60a;</span>crypto</span>
+    
+        <span class="sidebar-category-name" data-categories="docker"><span class="iconfont-archer">&#xe60a;</span>docker</span>
+    
+        <span class="sidebar-category-name" data-categories="awd"><span class="iconfont-archer">&#xe60a;</span>awd</span>
+    
+        <span class="sidebar-category-name" data-categories="awd/web"><span class="iconfont-archer">&#xe60a;</span>awd/web</span>
+    
+        <span class="sidebar-category-name" data-categories="WEB"><span class="iconfont-archer">&#xe60a;</span>WEB</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "JiangNiao"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
